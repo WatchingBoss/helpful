@@ -50,20 +50,20 @@ __Make text bold__
 ** Indent with backticks
 ```
 if(x < input)
-return(x);
+  return(x);
 else
-return(input);
+  return(input);
 ```
 ** Using syntal highlighting
 ```C
 if(x < input)
-return(x);
+  return(x);
 else
-return(input);
+  return(input);
 ```
 * Extras
 ** Direct comment to someone
-Hello @admin
+Hello @meteor
 ** Tasks list
 - [x] This is complete 
 - [ ] This is should be complete
@@ -71,9 +71,7 @@ Hello @admin
 First  | Second | Third
 ------ |--------|-------
 Content|Content |Content
------- |--------|-------
 Content larger|Content larger|Content larger
------- |--------|-------
 Content the largest|Content the largest|Content the largest
 ** Emoji
 It's quite good! :smile: :wink: :thumbsup:
