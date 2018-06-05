@@ -1,0 +1,87 @@
+# Headers
+# Header of first level
+# First
+##  Header of second level
+## Second
+### Header of third level
+### Third
+#### Header of fourth level
+#### Fourth
+##### Header of fifth level
+##### Fifth
+###### Header of sixth level
+###### Sixth
+
+# Text
+## Italic
+*Make text italic*
+_Make text italic_
+
+## Bold 
+**Make text bold**
+__Make text bold__
+
+** Link
+[Google](https://google.com)
+
+#Lists
+## Numbered list
+1. One
+2. Two
+3. Three
+
+## Bullet points
+- Vegetables  (Use (*) rather than (-))
+- Fruits
+	- Apple
+	- Mango
+
+# Images 
+![Image of cat](https://images.pexels.com/photos/20787/pexels-photo.jpg?cs=srgb&dl=adorable-animal-cat-20787.jpg&fm=jpg)
+
+# Quotes
+## How Mahatma Gandhi said:
+> Be the change
+> that you want to see in the world.
+
+# Code
+## Inline code block
+`x < input ? return(x) : return(input)`
+
+## Indent with four spaces
+    if(x < input)
+      return(x);
+    else
+      return(input);
+## Indent with backticks
+```
+if(x < input)
+return(x);
+else
+return(input);
+```
+## Using syntal highlighting
+```C
+if(x < input)
+return(x);
+else
+return(input);
+```
+# Extras
+## Direct comment to someone
+Hello @admin
+## Tasks list
+- [x] This is complete 
+- [ ] This is should be complete
+## Tables
+First  | Second | Third
+------ |--------|-------
+Content|Content |Content
+------ |--------|-------
+Content larger|Content larger|Content larger
+------ |--------|-------
+Content the largest|Content the largest|Content the largest
+## Emoji
+It's quite good! :smile: :wink: :thumbsup:
+
+[Emoji cheat sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet/)
