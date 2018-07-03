@@ -18,7 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet auto-complete try use-package usepackage which-key))))
+	(web-mode php-mode zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet auto-complete try use-package usepackage which-key))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -27,3 +27,5 @@
  )
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
