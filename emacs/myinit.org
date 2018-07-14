@@ -1,14 +1,14 @@
 * Interface tweaks
 ** Theme
    #+BEGIN_SRC emacs-lisp
-(load-theme 'wombat)
+	 (load-theme 'wombat)
    #+END_SRC
 ** Window modes
 #+BEGIN_SRC emacs-lisp
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
 
 #+END_SRC
 
@@ -21,8 +21,8 @@
 * Disable backup and autosave
   #+BEGIN_SRC emacs-lisp
 
-(setq backup-inhibited t)
-(setq auto-save-default nil)
+    (setq backup-inhibited t)
+    (setq auto-save-default nil)
 
   #+END_SRC
 * Font
@@ -39,28 +39,16 @@
    Set current buffer's tab char's display width ot 4 spaces
    #+BEGIN_SRC emacs-lisp
 		
-(setq-default tab-width 4)
-(setq tab-width 4)
+	 (setq-default tab-width 4)
+	 (setq tab-width 4)
 
    #+END_SRC
 ** C default style "lynux"
    For c-mode style "linux"
    #+BEGIN_SRC emacs-lisp
 
-(setq c-default-style "linux"
-	  c-basic-offset 4)
-
-   #+END_SRC
-
-** Tab works how \t
-   We can use for \t although C-i
-   #+BEGIN_SRC emacs-lisp
-
-;(defun my-insert-tab-char ()
-;  "Insert a tab char. (ASCII 9, \t)"
-;  (interactive)
-;  (insert "\t"))
-;(global-set-key (kbd "TAB") 'my-insert-tab-char) ; same as Ctrl+i
+	 (setq c-default-style "linux"
+		   c-basic-offset 4)
 
    #+END_SRC
 
@@ -68,7 +56,7 @@
    I don't know what is it))
    #+BEGIN_SRC emacs-lisp
 
-(add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
+	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
 
    #+END_SRC
 
@@ -131,56 +119,48 @@
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
 
-;; Bright-red TODOs
-(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
-(make-face 'font-lock-fixme-face)
-(make-face 'font-lock-note-face)
-(mapc (lambda (mode)
-		(font-lock-add-keywords
-		 mode
-		 '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-		   ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-	  fixme-modes)
-(modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
-(modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
+	;; Bright-red TODOs
+	(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+	(make-face 'font-lock-fixme-face)
+	(make-face 'font-lock-note-face)
+	(mapc (lambda (mode)
+			(font-lock-add-keywords
+			 mode
+			 '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+			   ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+		  fixme-modes)
+	(modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+	(modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
 
   #+END_SRC
 
 * Line definition
 #+BEGIN_SRC emacs-lisp
 
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#333333")
-(set-face-foreground 'highlight nil)
-(set-face-attribute hl-line-face nil :underline nil)
+  (global-hl-line-mode 1)
+  (set-face-background 'hl-line "#333333")
+  (set-face-foreground 'highlight nil)
+  (set-face-attribute hl-line-face nil :underline nil)
 
 #+END_SRC
-
-* Comments
-
-  I want make usefull comments
-  #+BEGIN_SRC emacs-lisp
-
-;(defun my/c-indent-or-tab-in-comment ()
-;  (interactive)
-;  (if (nth 4 (syntax-ppss))
-;	  (insert "\t")
-;	(call-interactively 'indent-for-tab-command)))
-
-  #+END_SRC
 
 * Org mode
   Activation org mode
   Definition global keys
   #+BEGIN_SRC emacs-lisp
 
-(require 'org)
+	(require 'org)
 
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-switch)
-(setq org-log-done t)
+	(global-set-key "\C-cl" 'org-store-link)
+	(global-set-key "\C-ca" 'org-agenda)
+	(global-set-key "\C-cc" 'org-capture)
+	(global-set-key "\C-cb" 'org-switch)
+	(setq org-log-done t)
+
+	(require 'ob-emacs-lisp)
+	(org-babel-do-load-languages
+	 'org-babel-load-languages
+	 '((emacs-lisp . t)))
 
   #+END_SRC
 * Packages
@@ -188,71 +168,70 @@
    Provides use package without installing
    #+BEGIN_SRC emacs-lisp
 
-(use-package try
-  :ensure t)
+	 (use-package try
+	   :ensure t)
 
    #+END_SRC
 ** Which key
    Show help about keys
    #+BEGIN_SRC emacs-lisp
 
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
+	 (use-package which-key
+	   :ensure t
+	   :config (which-key-mode))
 
    #+END_SRC
 
 ** Auto complete
    #+BEGIN_SRC emacs-lisp
 
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-	(ac-config-default)
-	(global-auto-complete-mode t)
-	))
+	 (use-package auto-complete
+	   :ensure t
+	   :init
+	   (progn
+		 (ac-config-default)
+		 (global-auto-complete-mode t)
+		 ))
 
    #+END_SRC
 
 ** Yasnippet-snippets
    #+BEGIN_SRC emacs-lisp
 
-
-;;(add-to-list 'load-path
-;;			 "~/.emacs.d/elpa/yasnippet")
-;;(use-package yasnippet-snippets
-;;  :ensure t
-;;  :init
-;;  (progn
-;;	(yas-global-mode 1)
-;;	))
+	 ;;(add-to-list 'load-path
+	 ;;			 "~/.emacs.d/elpa/yasnippet")
+	 ;;(use-package yasnippet-snippets
+	 ;;  :ensure t
+	 ;;  :init
+	 ;;  (progn
+	 ;;	(yas-global-mode 1)
+	 ;;	))
 
    #+END_SRC
 
 ** Multiple cursors
    #+BEGIN_SRC emacs-lisp
 
-(use-package multiple-cursors
-  :ensure t
-  :init
-  (progn
-	(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-	(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-	(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-	(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-	(global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)	
-	 ))
+	 (use-package multiple-cursors
+	   :ensure t
+	   :init
+	   (progn
+		 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+		 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+		 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+		 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+		 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)	
+		 ))
 
    #+END_SRC
 
 ** Org bullets
    #+BEGIN_SRC emacs-lisp
 
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+	 (use-package org-bullets
+	   :ensure t
+	   :config
+	   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
    #+END_SRC
 
@@ -260,80 +239,69 @@
    Change standard using console and search
    #+BEGIN_SRC emacs-lisp
 
-(use-package counsel
-  :ensure t
-  )
-(use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)
-		 ("C-r" . swiper)
-		 ("C-c C-r" . ivy-resume)
-		 ("M-x" . counsel-M-x)
-		 ("C-x C-f" . counsel-find-file))
-  :config
-  (progn
-	(ivy-mode 1)
-	(setq ivy-use-virtual-buffers t)
-	(setq enable-recursive-minibuffers t)
-;	(global-set-key (kbd "<f6>") 'ivy-resume)
-;	(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-;	(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-;	(global-set-key (kbd "<f1> l") 'counsel-find-library)
-;	(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;	(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;	(global-set-key (kbd "C-c g") 'counsel-git)
-;	(global-set-key (kbd "C-c j") 'counsel-git-grep)
-;	(global-set-key (kbd "C-c k") 'counsel-ag)
-;	(global-set-key (kbd "C-x l") 'counsel-locate)
-;	(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-	(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-	))
+	 (use-package counsel
+	   :ensure t
+	   )
+	 (use-package swiper
+	   :ensure t
+	   :bind (("C-s" . swiper)
+			  ("C-r" . swiper)
+			  ("C-c C-r" . ivy-resume)
+			  ("M-x" . counsel-M-x)
+			  ("C-x C-f" . counsel-find-file))
+	   :config
+	   (progn
+		 (ivy-mode 1)
+		 (setq ivy-use-virtual-buffers t)
+		 (setq enable-recursive-minibuffers t)
+		 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+		 ))
 
    #+END_SRC
 
 ** PHP-mode
    #+BEGIN_SRC emacs-lisp
 
-(use-package php-mode
-:ensure t
-:config
-(add-hook 'php-mode-hook
-'(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
-(add-hook 'php-mode-hook
-'(lambda ()
-(setq indent-tabs-mode t)
-(c-basic-offset 2)
-(setq tab-width 4)))
-)
+	 (use-package php-mode
+	   :ensure t
+	   :config
+	   (add-hook 'php-mode-hook
+				 '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
+	   (add-hook 'php-mode-hook
+				 '(lambda ()
+					(setq indent-tabs-mode t)
+					(c-basic-offset 2)
+					(setq tab-width 4)))
+	   )
    #+END_SRC
 
 ** Web-mode
    #+BEGIN_SRC emacs-lisp
 
-(use-package web-mode
-:ensure t
-:init
-(progn
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-))
+	 (use-package web-mode
+	   :ensure t
+	   :init
+	   (progn
+		 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+		 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+		 ))
    #+END_SRC
 
 ** Emmet
    #+BEGIN_SRC emacs-lisp
 
-(use-package emmet-mode
-:ensure t
-:init
-:config
-(add-hook 'sgml-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook ' emmet-mode)
-(add-hook 'web-mode-hook ' emmet-mode))
+	 (use-package emmet-mode
+	   :ensure t
+	   :init
+	   :config
+	   (add-hook 'sgml-mode-hook 'emmet-mode)
+	   (add-hook 'css-mode-hook ' emmet-mode)
+	   (add-hook 'web-mode-hook ' emmet-mode))
 
    #+END_SRC
 
@@ -341,20 +309,19 @@
    #+BEGIN_SRC emacs-lisp
 
    #+END_SRC
-
 * Comfortable using
 ** ido
    #+BEGIN_SRC emacs-lisp
 
-(setq indo-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
+	 (setq indo-enable-flex-matching t)
+	 (setq ido-everywhere t)
+	 (ido-mode 1)
 
    #+END_SRC
 ** Buffer
    #+BEGIN_SRC emacs-lisp
 
-;;(defalias 'list-buffers 'ibuffer-other-window)
+	 ;;(defalias 'list-buffers 'ibuffer-other-window)
 
    #+END_SRC
 
@@ -363,8 +330,9 @@
    Use S-<up>, S-<right>, S-<down>, S-<left>
    #+BEGIN_SRC emacs-lisp
 
-(winner-mode 1)
-(windmove-default-keybindings)
+	 (winner-mode 1)
+	 (windmove-default-keybindings)
 
    #+END_SRC
+
 
