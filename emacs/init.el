@@ -18,7 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(web-mode php-mode zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet auto-complete try use-package usepackage which-key))))
+	(flycheck-checkbashisms flycheck-pkg-config flycheck web-mode php-mode zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet auto-complete try use-package usepackage which-key))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

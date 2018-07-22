@@ -305,7 +305,30 @@
 
    #+END_SRC
 
-** 
+** Flycheck
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :ensure t
+       :init
+       (global-flycheck-mode t))
+   #+END_SRC
+*** flycheck-pkg-config
+	Extension for C/C++ mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck-pkg-config
+       :ensure t
+       :init)
+   #+END_SRC
+
+*** flycheck-checkbashisms
+	Extension for SHELL
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck-checkbashisms
+       :ensure t
+       :config
+       (flycheck-checkbashisms-setup))
+   #+END_SRC
+*** 
    #+BEGIN_SRC emacs-lisp
 
    #+END_SRC
