@@ -1,8 +1,14 @@
 * Interface tweaks
 ** Theme
    #+BEGIN_SRC emacs-lisp
-	 (load-theme 'wombat)
+     ;; (load-theme 'wombat)
+      (load-theme 'monokai t)
+     ;;(load-theme 'spacemacs-dark t)
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
 ** Window modes
 #+BEGIN_SRC emacs-lisp
 
@@ -14,9 +20,7 @@
 
 ** Hide welcome screen
    #+BEGIN_SRC emacs-lisp
-
-(setq inhibit-startup-screen t)
-
+     (setq inhibit-startup-screen t)
    #+END_SRC
 * Disable backup and autosave
   #+BEGIN_SRC emacs-lisp
@@ -28,8 +32,8 @@
 * Font
 #+BEGIN_SRC emacs-lisp
 
-(add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
-(set-face-attribute 'default t :font "Liberation Mono 11")
+  (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
+  (set-face-attribute 'default t :font "Liberation Mono 11")
 
 #+END_SRC
 
@@ -145,24 +149,61 @@
 #+END_SRC
 
 * Org mode
+** Config org mode
   Activation org mode
   Definition global keys
   #+BEGIN_SRC emacs-lisp
+    (require 'org)
 
-	(require 'org)
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-cc" 'org-capture)
+    (global-set-key "\C-cb" 'org-switch)
+    (setq org-log-done t)
 
-	(global-set-key "\C-cl" 'org-store-link)
-	(global-set-key "\C-ca" 'org-agenda)
-	(global-set-key "\C-cc" 'org-capture)
-	(global-set-key "\C-cb" 'org-switch)
-	(setq org-log-done t)
-
-	(require 'ob-emacs-lisp)
-	(org-babel-do-load-languages
-	 'org-babel-load-languages
-	 '((emacs-lisp . t)))
-
+    (require 'ob-emacs-lisp)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)))
   #+END_SRC
+** Org bullets
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+   #+END_SRC
+
+** org-ac
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-ac
+       :ensure t
+       :init (progn
+               (require 'org-ac)
+               (org-ac/config-default)
+               ))
+   #+END_SRC
+
+   #+RESULTS:
+* Comfortable using
+** ido
+   #+BEGIN_SRC emacs-lisp
+
+     (setq indo-enable-flex-matching t)
+     (setq ido-everywhere t)
+     (ido-mode 1)
+
+   #+END_SRC
+** Winner mode 
+   Use C-<left>, C-<right>
+   Use S-<up>, S-<right>, S-<down>, S-<left>
+   #+BEGIN_SRC emacs-lisp
+
+	 (winner-mode 1)
+	 (windmove-default-keybindings)
+
+   #+END_SRC
 * Packages
 ** Try
    Provides use package without installing
@@ -195,20 +236,6 @@
 
    #+END_SRC
 
-** Yasnippet-snippets
-   #+BEGIN_SRC emacs-lisp
-
-	 ;;(add-to-list 'load-path
-	 ;;			 "~/.emacs.d/elpa/yasnippet")
-	 ;;(use-package yasnippet-snippets
-	 ;;  :ensure t
-	 ;;  :init
-	 ;;  (progn
-	 ;;	(yas-global-mode 1)
-	 ;;	))
-
-   #+END_SRC
-
 ** Multiple cursors
    #+BEGIN_SRC emacs-lisp
 
@@ -222,16 +249,6 @@
 		 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 		 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)	
 		 ))
-
-   #+END_SRC
-
-** Org bullets
-   #+BEGIN_SRC emacs-lisp
-
-	 (use-package org-bullets
-	   :ensure t
-	   :config
-	   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
    #+END_SRC
 
@@ -261,35 +278,32 @@
 
 ** PHP-mode
    #+BEGIN_SRC emacs-lisp
-
-	 (use-package php-mode
-	   :ensure t
-	   :config
-	   (add-hook 'php-mode-hook
-				 '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
-	   (add-hook 'php-mode-hook
-				 '(lambda ()
-					(setq indent-tabs-mode t)
-					(c-basic-offset 2)
-					(setq tab-width 4)))
-	   )
+     (use-package php-mode
+       :ensure t
+       :config
+       (add-hook 'php-mode-hook
+                 '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
+       (add-hook 'php-mode-hook
+                 '(lambda ()
+                    (setq indent-tabs-mode t)
+                    (c-basic-offset 2)
+                    (setq tab-width 4))))
    #+END_SRC
 
 ** Web-mode
    #+BEGIN_SRC emacs-lisp
-
-	 (use-package web-mode
-	   :ensure t
-	   :init
-	   (progn
-		 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-		 ))
+     (use-package web-mode
+       :ensure t
+       :init
+       (progn
+         (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+         ))
    #+END_SRC
 
 ** Emmet
@@ -311,7 +325,11 @@
        :ensure t
        :init
        (global-flycheck-mode t))
+
    #+END_SRC
+   
+   #+RESULTS:
+   
 *** flycheck-pkg-config
 	Extension for C/C++ mode
    #+BEGIN_SRC emacs-lisp
@@ -328,34 +346,28 @@
        :config
        (flycheck-checkbashisms-setup))
    #+END_SRC
-*** 
+	
+** Hungry delete
+   Delete all blank space before any symbol
    #+BEGIN_SRC emacs-lisp
-
+     (use-package hungry-delete
+       :ensure t
+       :config
+       (global-hungry-delete-mode))
    #+END_SRC
-* Comfortable using
-** ido
+   
+   #+RESULTS:
+   : t
+
+** Expand region
    #+BEGIN_SRC emacs-lisp
-
-	 (setq indo-enable-flex-matching t)
-	 (setq ido-everywhere t)
-	 (ido-mode 1)
-
-   #+END_SRC
-** Buffer
-   #+BEGIN_SRC emacs-lisp
-
-	 ;;(defalias 'list-buffers 'ibuffer-other-window)
-
+     (use-package expand-region
+       :ensure t
+       :config
+       (global-set-key (kbd "C-=") 'er/expand-region))
    #+END_SRC
 
-** Winner mode 
-   Use C-<left>, C-<right>
-   Use S-<up>, S-<right>, S-<down>, S-<left>
-   #+BEGIN_SRC emacs-lisp
-
-	 (winner-mode 1)
-	 (windmove-default-keybindings)
-
-   #+END_SRC
+   #+RESULTS:
+   : t
 
 
