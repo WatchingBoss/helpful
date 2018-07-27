@@ -122,20 +122,18 @@
    #+END_SRC
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
-
-	;; Bright-red TODOs
-	(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
-	(make-face 'font-lock-fixme-face)
-	(make-face 'font-lock-note-face)
-	(mapc (lambda (mode)
-			(font-lock-add-keywords
-			 mode
-			 '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-			   ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-		  fixme-modes)
-	(modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
-	(modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
-
+    ;; Bright-red TODOs
+    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+    (make-face 'font-lock-fixme-face)
+    (make-face 'font-lock-note-face)
+    (mapc (lambda (mode)
+            (font-lock-add-keywords
+             mode
+             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+          fixme-modes)
+    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+    (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
   #+END_SRC
 
 * Line definition
@@ -147,6 +145,24 @@
   (set-face-attribute hl-line-face nil :underline nil)
 
 #+END_SRC
+* Comfortable using
+** ido
+   #+BEGIN_SRC emacs-lisp
+
+     (setq indo-enable-flex-matching t)
+     (setq ido-everywhere t)
+     (ido-mode 1)
+
+   #+END_SRC
+** Winner mode 
+   Use C-<left>, C-<right>
+   Use S-<up>, S-<right>, S-<down>, S-<left>
+   #+BEGIN_SRC emacs-lisp
+
+	 (winner-mode 1)
+	 (windmove-default-keybindings)
+
+   #+END_SRC
 
 * Org mode
 ** Config org mode
@@ -166,6 +182,52 @@
      'org-babel-load-languages
      '((emacs-lisp . t)))
   #+END_SRC
+** Google calendar
+   #+BEGIN_SRC emacs-lisp
+	 (setq package-check-signarure nil)
+
+	 (use-package org-gcal
+	   :ensure t
+	   :config
+	   (setq org-gcal-client-id "3784406070-69cr5fjlnds9qnar0d7g3rbelrb8s9ql.apps.googleusercontent.com"
+			 org-gcal-client-secret "OWWg2jQrVjVJCx21wQqHKyJC"
+			 org-gcal-file-alist '(("opil9496@gmail.com" . "~/MEGAsync/orgfiles/gcal.org")) ))
+
+	 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+	 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+   #+END_SRC
+
+   #+RESULTS:
+   | lambda | nil | (org-gcal-sync) |
+
+** Org-agenda-files
+   #+BEGIN_SRC emacs-lisp
+     (setq org-agenda-files (list "~/MEGAsync/orgfiles/gcal.org"
+                                  "~/MEGAsync/orgfiles/i.org"))
+   #+END_SRC
+
+   #+RESULTS:
+   | ~/MEGAsync/orgfiles/gcal.org | ~/MEGAsync/orgfiles/i.org |
+
+** Org-capture-templates
+   #+BEGIN_SRC emacs-lisp
+     (setq org-capture-templates
+           '(("a" "Appointment" entry (file+headline "~/MEGAsync/orgfiles/gcal.org" "Appointments")
+              "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
+             ("n" "Note" entry (file+headline "~/MEGAsync/orgfiles/notes.org" "Notes")
+              "* Note %?\n%T")
+             ("l" "Link" entry (file+headline "~/MEGAsync/orgfiles/links.org" "Links")
+              "* %? %^L %^g \n%T" :prepend t)
+             ("t" "To Do Item" entry (file+headline "~/MEGAsync/orgfiles/i.org" "To Do Items")
+              "* %?\n%T" :prepand t)))
+   #+END_SRC
+
+   #+RESULTS:
+   | a | Appointment | entry | (file+headline ~/MEGAsync/orgfiles/gcal.org Appointments) | * TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n |          |   |
+   | n | Note        | entry | (file+headline ~/MEGAsync/orgfiles/notes.org Notes)       | * Note %?\n%T                                           |          |   |
+   | l | Link        | entry | (file+headline ~/MEGAsync/orgfiles/links.org Links)       | * %? %^L %^g \n%T                                       | :prepend | t |
+   | t | To Do Item  | entry | (file+headline ~/MEGAsync/orgfiles/i.org To Do Items)     | * %?\n%T                                                | :prepand | t |
+
 ** Org bullets
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
@@ -186,24 +248,6 @@
    #+END_SRC
 
    #+RESULTS:
-* Comfortable using
-** ido
-   #+BEGIN_SRC emacs-lisp
-
-     (setq indo-enable-flex-matching t)
-     (setq ido-everywhere t)
-     (ido-mode 1)
-
-   #+END_SRC
-** Winner mode 
-   Use C-<left>, C-<right>
-   Use S-<up>, S-<right>, S-<down>, S-<left>
-   #+BEGIN_SRC emacs-lisp
-
-	 (winner-mode 1)
-	 (windmove-default-keybindings)
-
-   #+END_SRC
 * Packages
 ** Try
    Provides use package without installing
