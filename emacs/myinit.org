@@ -1,9 +1,10 @@
 * Interface tweaks
 ** Theme
    #+BEGIN_SRC emacs-lisp
-     ;; (load-theme 'wombat)
-      (load-theme 'monokai t)
-     ;;(load-theme 'spacemacs-dark t)
+	 ;; (load-theme 'wombat)
+	 ;;(load-theme 'spacemacs-dark t)
+	 (load-theme 'monokai t)
+	 (set-face-foreground 'font-lock-comment-face "#b4b4b4")
    #+END_SRC
 
    #+RESULTS:
