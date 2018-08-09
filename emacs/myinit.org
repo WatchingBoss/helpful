@@ -137,6 +137,12 @@
     (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
   #+END_SRC
 
+* gdb
+  #+BEGIN_SRC emacs-lisp 
+	;; Mark breakpoint 
+	(require 'gud)
+	(define-key gud-mode-map (kbd "C-c SPC") 'gub-break)
+  #+END_SRC
 * Line definition
 #+BEGIN_SRC emacs-lisp
 
