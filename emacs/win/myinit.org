@@ -425,8 +425,8 @@
   (use-package csharp-mode
 	:ensure t
 	:init
-	(defun my-csharp-mode-hook()
-	  (electric-pair-local-mode 1))
+;	(defun my-csharp-mode-hook()
+;	  (electric-pair-local-mode 1))
 	(progn
 	  (add-hook 'csharp-mode-hook 'my-csharp-mode-hook))
 	)
@@ -440,5 +440,13 @@
 	(progn
 	  (add-hook 'after-init-hook 'global-company-mode)
 	  )
+	)
+#+END_SRC
+** Smartparens
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+	:ensure t
+	:init
+	(smartparens-global-mode)
 	)
 #+END_SRC
