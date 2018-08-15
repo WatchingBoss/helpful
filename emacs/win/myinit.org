@@ -121,6 +121,11 @@
 (setq indent-tabs-mode t)))
 
    #+END_SRC
+** cc-mode comment
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
+										   comment-end " */") ) )
+#+END_SRC
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
     ;; Bright-red TODOs
@@ -372,10 +377,11 @@
 
 ** Flycheck
    #+BEGIN_SRC emacs-lisp
-     (use-package flycheck
-       :ensure t
-       :init
-       (global-flycheck-mode t))
+	 (use-package flycheck
+	   :ensure t
+	   :init
+	   (global-flycheck-mode t)
+	   )
    #+END_SRC
    
    #+RESULTS:
@@ -383,9 +389,9 @@
 *** flycheck-pkg-config
 	Extension for C/C++ mode
    #+BEGIN_SRC emacs-lisp
-	 (use-package flycheck-pkg-config
-	   :ensure t
-	   :init)
+	 ;;(use-package flycheck-pkg-config
+	 ;;  :ensure t
+	 ;;  :init)
    #+END_SRC
 
 *** flycheck-checkbashisms
@@ -447,6 +453,6 @@
   (use-package smartparens
 	:ensure t
 	:init
-	(smartparens-global-mode)
+	(smartparens-global-mode t)
 	)
 #+END_SRC
