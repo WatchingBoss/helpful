@@ -39,46 +39,31 @@
 #+END_SRC
 
 * Controll in code
-** Tab width 4 colons
-   Set default tab char's display width to 4 spaces
-   Set current buffer's tab char's display width ot 4 spaces
-   #+BEGIN_SRC emacs-lisp
-		
-	 (setq-default tab-width 4)
-	 (setq tab-width 4)
-
-   #+END_SRC
-** C default style "lynux"
-   For c-mode style "linux"
-   #+BEGIN_SRC emacs-lisp
-
-	 (setq c-default-style "linux"
-		   c-basic-offset 4)
-
-   #+END_SRC
-
 ** Add to auto mode alist .h of c-mode
-   I don't know what is it))
    #+BEGIN_SRC emacs-lisp
-
 	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
-
+	 (add-to-list 'auto-mode-alist ' ("\\.hpp\\'" . c++-mode))
    #+END_SRC
 
-** Open brace after function name without \t
-
+** Define my c-mode style
    #+BEGIN_SRC emacs-lisp
+	 (setq-default c-default-style "linux"
+		   c-basic-offset 4
+		   tab-width 4
+		   indent-tabs-mode t)
 
-(defun my-c-mode-hook ()
-  (c-set-offset 'substatement-open 0))
-(add-hook 'c-mode-hook 'my-c-mode-)
-
-   #+END_SRC
-
-** \t before case inside switch
-   #+BEGIN_SRC emacs-lisp
-
-(c-set-offset 'case-label '+)
+	 (defun my-c-mode-hook ()
+	   (c-set-offset 'substatement-open 0)
+	   (c-set-offset 'inline-open 0)
+	   (c-set-offset 'innamespace '0)
+	   (c-set-offset 'inextern-lang '0)
+	   (c-set-offset 'label '*)
+	   (c-set-offset 'case-label '+)
+	   (c-set-offset 'access-label '/)
+	   )
+	 (add-hook 'c-mode-hook 'my-c-mode-hook)
+	 (add-hook 'cc-mode-hook 'my-c-mode-hook)
+	 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 
    #+END_SRC
 ** Move line
@@ -115,16 +100,14 @@
 
 ** conf-mode-hook tabs
    #+BEGIN_SRC emacs-lisp
-
-(add-hook 'conf-mode-hook
-(lambda ()
-(setq indent-tabs-mode t)))
-
+	 (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
    #+END_SRC
-** cc-mode comment
+** c++-mode/cc-mode comment
 #+BEGIN_SRC emacs-lisp
+  (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
+											comment-end   " */") ) )
   (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
-										   comment-end " */") ) )
+										   comment-end   " */") ) )
 #+END_SRC
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
