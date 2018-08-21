@@ -45,7 +45,7 @@
 	 (add-to-list 'auto-mode-alist ' ("\\.hpp\\'" . c++-mode))
    #+END_SRC
 
-** Define my c-mode style
+** Define my cc-mode style
    #+BEGIN_SRC emacs-lisp
 	 (setq-default c-default-style "linux"
 		   c-basic-offset 4
@@ -53,18 +53,21 @@
 		   indent-tabs-mode t)
 
 	 (defun my-c-mode-hook ()
-	   (c-set-offset 'substatement-open 0)
-	   (c-set-offset 'inline-open 0)
-	   (c-set-offset 'innamespace '0)
+	   (c-set-offset 'substatement-open '0)
+	   (c-set-offset 'inline-open '0)
+	   (c-set-offset 'innamespace '*)
 	   (c-set-offset 'inextern-lang '0)
 	   (c-set-offset 'label '*)
 	   (c-set-offset 'case-label '+)
 	   (c-set-offset 'access-label '/)
 	   )
-	 (add-hook 'c-mode-hook 'my-c-mode-hook)
-	 (add-hook 'cc-mode-hook 'my-c-mode-hook)
-	 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 
+	 (dolist (hooks `(c-mode-hook 
+					  cc-mode-hook
+					  c++-mode-hook
+					  csharp-mode-hook
+					  ))
+	   (add-hook hooks 'my-c-mode-hook))
    #+END_SRC
 ** Move line
    Use M-<up> and M-<down> to move lines
@@ -102,12 +105,14 @@
    #+BEGIN_SRC emacs-lisp
 	 (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
    #+END_SRC
-** c++-mode/cc-mode comment
+** comment
 #+BEGIN_SRC emacs-lisp
   (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
 											comment-end   " */") ) )
   (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
 										   comment-end   " */") ) )
+  (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
+											   comment-end   " */") ) )
 #+END_SRC
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
@@ -365,6 +370,7 @@
 	   :init
 	   (global-flycheck-mode t)
 	   )
+	 (setq-default flycheck-disabled-checkers '(c/c++-gcc))
    #+END_SRC
    
    #+RESULTS:
@@ -414,8 +420,8 @@
   (use-package csharp-mode
 	:ensure t
 	:init
-;	(defun my-csharp-mode-hook()
-;	  (electric-pair-local-mode 1))
+	(defun my-csharp-mode-hook()
+	  (electric-pair-local-mode 1))
 	(progn
 	  (add-hook 'csharp-mode-hook 'my-csharp-mode-hook))
 	)
