@@ -149,9 +149,9 @@
 ** ido
    #+BEGIN_SRC emacs-lisp
 
-     (setq indo-enable-flex-matching t)
-     (setq ido-everywhere t)
-     (ido-mode 1)
+	 (setq indo-enable-flex-matching t)
+	 (setq ido-everywhere t)
+	 (ido-mode 1)
 
    #+END_SRC
 ** Winner mode 
