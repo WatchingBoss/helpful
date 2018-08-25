@@ -39,6 +39,11 @@
 #+END_SRC
 
 * Controll in code
+** Auto revert buffer
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
+  (add-hook 'dired-mode-hook 'auto-revert-mode)
+#+END_SRC
 ** Add to auto mode alist .h of c-mode
    #+BEGIN_SRC emacs-lisp
 	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
@@ -56,9 +61,9 @@
 	   (c-set-offset 'substatement-open '0)
 	   (c-set-offset 'inline-open '0)
 	   (c-set-offset 'innamespace '*)
-	   (c-set-offset 'inextern-lang '0)
+	   (c-set-offset 'inextern-lang '*)
 	   (c-set-offset 'label '*)
-	   (c-set-offset 'case-label '+)
+	   (c-set-offset 'case-label '*)
 	   (c-set-offset 'access-label '/)
 	   )
 
@@ -149,9 +154,9 @@
 ** ido
    #+BEGIN_SRC emacs-lisp
 
-	 (setq indo-enable-flex-matching t)
-	 (setq ido-everywhere t)
-	 (ido-mode 1)
+     (setq indo-enable-flex-matching t)
+     (setq ido-everywhere t)
+     (ido-mode 1)
 
    #+END_SRC
 ** Winner mode 
@@ -371,6 +376,13 @@
 	   (global-flycheck-mode t)
 	   )
 	 (setq-default flycheck-disabled-checkers '(c/c++-gcc))
+
+	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
+	   (add-hook my_hooks
+				 (lambda () (setq flycheck-gcc-include-path
+								  (list
+								   (expand-file-name "D:/Documents/libs/third_part_libs"))
+								  ))))
    #+END_SRC
    
    #+RESULTS:
@@ -437,11 +449,24 @@
 	  )
 	)
 #+END_SRC
-** Smartparens
+n** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
 	:ensure t
 	:init
 	(smartparens-global-mode t)
+	)
+#+END_SRC
+** GLSL mode
+#+BEGIN_SRC emacs-lisp
+  (use-package glsl-mode
+	:ensure t
+	:init
+	(progn
+	  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
+	  )
 	)
 #+END_SRC
