@@ -39,6 +39,11 @@
 #+END_SRC
 
 * Controll in code
+** Auto revert buffer
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
+  (add-hook 'dired-mode-hook 'auto-revert-mode)
+#+END_SRC
 ** Add to auto mode alist .h of c-mode
    #+BEGIN_SRC emacs-lisp
 	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
@@ -365,11 +370,17 @@
 
 ** Flycheck
    #+BEGIN_SRC emacs-lisp
-     (use-package flycheck
-       :ensure t
-       :init
-       (global-flycheck-mode t))
+	 (use-package flycheck
+	   :ensure t
+	   :init
+	   (global-flycheck-mode t))
 
+	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
+	   (add-hook my_hooks
+				 (lambda () (setq flycheck-gcc-include-path
+								  (list
+								   (expand-file-name "~/Documents/docs/libs/third_part_libs"))
+								  ))))
    #+END_SRC
    
    #+RESULTS:
