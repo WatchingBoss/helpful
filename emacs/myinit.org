@@ -137,20 +137,12 @@
     (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
   #+END_SRC
 
-* gdb
-  #+BEGIN_SRC emacs-lisp 
-	;; Mark breakpoint 
-	(require 'gud)
-	(define-key gud-mode-map (kbd "C-c SPC") 'gub-break)
-  #+END_SRC
 * Line definition
 #+BEGIN_SRC emacs-lisp
-
   (global-hl-line-mode 1)
   (set-face-background 'hl-line "#333333")
   (set-face-foreground 'highlight nil)
   (set-face-attribute hl-line-face nil :underline nil)
-
 #+END_SRC
 * Comfortable using
 ** ido
@@ -165,10 +157,8 @@
    Use C-<left>, C-<right>
    Use S-<up>, S-<right>, S-<down>, S-<left>
    #+BEGIN_SRC emacs-lisp
-
 	 (winner-mode 1)
 	 (windmove-default-keybindings)
-
    #+END_SRC
 
 * Org mode
@@ -241,20 +231,8 @@
        :ensure t
        :config
        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
    #+END_SRC
 
-** org-ac
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-ac
-       :ensure t
-       :init (progn
-               (require 'org-ac)
-               (org-ac/config-default)
-               ))
-   #+END_SRC
-
-   #+RESULTS:
 * Packages
 ** Try
    Provides use package without installing
@@ -272,17 +250,6 @@
 	   :ensure t
 	   :config (which-key-mode))
 
-   #+END_SRC
-
-** Auto complete
-   #+BEGIN_SRC emacs-lisp
-	 (use-package auto-complete
-	   :ensure t
-	   :init
-	   (progn
-		 (ac-config-default)
-		 (global-auto-complete-mode t)
-		 ))
    #+END_SRC
 
 ** Multiple cursors
@@ -373,22 +340,24 @@
 	 (use-package flycheck
 	   :ensure t
 	   :init
-	   (global-flycheck-mode t))
+	   (global-flycheck-mode t)
+	   )
 
 	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
 	   (add-hook my_hooks
-				 (lambda () (setq flycheck-gcc-include-path
-								  (list
-								   (expand-file-name "~/Documents/docs/libs/third_part_libs")
-								   (expand-file-name "/usr/local/include")
-								   )
-								  ))))
+				 (lambda ()
+				   (setq flycheck-gcc-include-path
+						 (list
+						  (expand-file-name "~/Documents/docs/libs/third_part_libs")
+						  (expand-file-name "/usr/local/include")
+						  ))) )
+	   )
    #+END_SRC
    
    #+RESULTS:
 
-*** flycheck-gometalinter   
-#+BEGIN_SRC emacs-lisp
+*** Golang
+	#+BEGIN_SRC emacs-lisp
   (use-package flycheck-gometalinter
 	:ensure t
 	:init
@@ -413,23 +382,30 @@
 	  (setq flycheck-gometalinter-config "/path/to/gometalinter-config.json")
 	  )
 	)
-#+END_SRC
-*** flycheck-pkg-config
-	Extension for C/C++ mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package flycheck-pkg-config
-       :ensure t
-       :init)
-   #+END_SRC
+	#+END_SRC
+*** C/C++
+	#+BEGIN_SRC emacs-lisp
+	  ;; flycheck-pkg-config
+	  (use-package flycheck-pkg-config
+		:ensure t
+		:init )
 
-*** flycheck-checkbashisms
-	Extension for SHELL
-   #+BEGIN_SRC emacs-lisp
+	  ;; flycheck-irony
+	  (use-package flycheck-irony
+		:ensure t
+		:config
+		(eval-after-load 'flycheck
+		  '(add-hook 'flycheck-mode-hook 'flycheck-irony-setup))
+		)
+	#+END_SRC
+
+*** Shell
+	#+BEGIN_SRC emacs-lisp
      (use-package flycheck-checkbashisms
        :ensure t
        :config
        (flycheck-checkbashisms-setup))
-   #+END_SRC
+	#+END_SRC
 	
 ** Hungry delete
    Delete all blank space before any symbol
@@ -476,8 +452,68 @@
 	  )
 	)
 #+END_SRC
-** Smartparens
+*** C/C++
+#+BEGIN_SRC emacs-lisp
+  ;; Company-irony
+  ;; company-mode asynchronous completion backend for the C, C++ languages.
+  (use-package company-irony
+	:ensure t
+	:config
+	(eval-after-load 'company
+	  '(add-to-list 'company-backends 'company-irony))
+	(add-hook 'c++-mode-hook 'irony-mode)
+	(add-hook 'c-mode-hook 'irony-mode)
+	(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+	)
 
+  ;; Irony-eldoc
+  (use-package irony-eldoc
+	:ensure t
+	:config (add-hook 'irony-mode-hook 'irony-eldoc)
+	)
+#+END_SRC
+*** Python
+#+BEGIN_SRC emacs-lisp
+  ;; Company-jedi
+  (use-package company-jedi
+	:ensure t
+	:config
+	(add-hook 'python-mode-hook 'jedi:setup)
+	(setq jedi:complete-on-dot t
+		  jedi:use-shortcuts t)
+	(add-hook 'python-mode-hook
+			  (lambda () (add-to-list 'company-backends 'company-jedi)) )
+	)
+
+  ;; ;; Company-anaconda
+  ;; (use-package company-anaconda
+  ;;   :ensure t
+  ;;   :config
+  ;;   (eval-after-load 'company
+  ;; 	'(add-to-list 'company-backends 'company-anaconda))
+  ;;   (add-hook 'python-mode-hook 'anaconda-mode)
+  ;;  )
+
+#+END_SRC
+*** Golang
+#+BEGIN_SRC emacs-lisp
+  ;; Go-eldoc
+  (use-package go-eldoc
+	:ensure t
+	:defer
+	:init
+	(progn
+	  (require 'company)
+	  (require 'company-go)
+	  (setq company-tooltip-limit 20)
+	  (setq company-idle-delay .3)
+	  (setq company-echo-delay 0)
+	  (setq company-begin-commands '(self-insert-command))
+	  (add-hook 'go-mode-hook 'go-eldoc-setup)
+	  )
+	)
+#+END_SRC
+** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
 	:ensure t
@@ -496,16 +532,19 @@
 	 )
    )
 #+END_SRC
-** Go-eldoc
+** Markdown-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package go-eldoc
+  (use-package markdown-mode
 	:ensure t
-	:defer
+	:commands (markdown-mode gfm-mode)
+	:mode (
+		   ("README\\.md\\'" . gfm-mode)
+		   ("\\.md\\'" . markdown-mode)
+		   ("\\.markdown\\'" . markdown-mode)
+		   )
 	:init
 	(progn
-	  (require 'go-autocomplete)
-	  (require 'auto-complete-config)
-	  (add-hook 'go-mode-hook 'go-eldoc-setup)
+	  (setq markdown-command "pandoc")
 	  )
 	)
 #+END_SRC
