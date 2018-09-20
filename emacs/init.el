@@ -24,7 +24,7 @@
 	("c3d4af771cbe0501d5a865656802788a9a0ff9cf10a7df704ec8b8ef69017c68" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-	(rust-mode ycmd-eldoc flycheck-ycmd company-ycmd ycmd flycheck-irony irony-eldoc company-anaconda company-jedi company-irony markdown-mode go-eldoc go-mode flycheck-gometalinter smartparens company csharp-mode org-gcal monokai-theme expand-region hungry-delete flycheck-checkbashisms flycheck-pkg-config flycheck web-mode php-mode zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet try use-package usepackage which-key))))
+	(neotree flycheck-rust racer rust-mode ycmd-eldoc flycheck-ycmd company-ycmd ycmd flycheck-irony irony-eldoc company-anaconda company-jedi company-irony markdown-mode go-eldoc go-mode flycheck-gometalinter smartparens company csharp-mode org-gcal monokai-theme expand-region hungry-delete flycheck-checkbashisms flycheck-pkg-config flycheck web-mode php-mode zenburn-theme org counsel tabbar org-bullets yasnippet-snippets multiple-cursors yasnippet try use-package usepackage which-key))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

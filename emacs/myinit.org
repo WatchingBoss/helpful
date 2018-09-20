@@ -149,7 +149,16 @@
    #+END_SRC
    
    #+RESULTS:
-
+*** Rust
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-rust
+	:ensure t
+	:init
+	(progn
+	  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+	  )
+	)
+#+END_SRC
 *** Golang
 	#+BEGIN_SRC emacs-lisp
 	  (use-package flycheck-gometalinter
@@ -292,13 +301,12 @@
 	(progn
 	  (require 'ycmd-eldoc)
 	  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
-	  (setq ycmd-rust-src-path "/home/ubu/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src")
 	  )
 	(set-variable 'ycmd-server-command '("python3"
 										 "/media/ubu/data/Downloads/emacs/ycmd/ycmd/"))
 	;; (add-hook 'after-init-hook #'global-ycmd-mode)
 	(dolist (hooks '(c-mode-hook c++-mode_hook csharp-mode-hook java-mode-hook
-								 python-mode-hook go-mode-hook rust-mode-hook))
+								 python-mode-hook go-mode-hook))
 	  (add-hook hooks 'ycmd-mode))
 	)
 
@@ -325,6 +333,38 @@
 	  (setq rust-format-on-save t)
 	  )
 	)
+#+END_SRC
+** Rust: Emacs-racer
+#+BEGIN_SRC emacs-lisp
+  (use-package racer
+	:ensure t
+	:init
+	(progn
+	  (setq racer-rust-src-path "/home/ubu/.rustup/toolchains/stable-x86_64-unknown-linux-gnu\
+  /lib/rustlib/src/rust/src")
+	  )
+	:config
+	(add-hook 'rust-mode-hook #'racer-mode)
+	(add-hook 'racer-mode-hook #'company-mode)
+	)
+#+END_SRC
+** Eldoc
+#+BEGIN_SRC emacs-lisp
+  (use-package eldoc
+	:ensure t
+	:config
+	(add-hook 'ycmd-mode-hook #'eldoc-mode)
+	(add-hook 'racer-mode-hook #'eldoc-mode)
+	)
+#+END_SRC
+** NeoTree
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+	:ensure t
+	:init
+	(progn
+	  (global-set-key [f8] 'neotree-toggle))
+  )
 #+END_SRC
 * Org mode
 ** Config org mode
