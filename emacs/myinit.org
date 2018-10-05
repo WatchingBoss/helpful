@@ -144,11 +144,21 @@
 						 (list
 						  (expand-file-name "~/Documents/docs/libs/third_part_libs")
 						  (expand-file-name "/usr/local/include")
-						  ))) )
-	   )
+						  ))) ))
    #+END_SRC
    
    #+RESULTS:
+*** Python
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package flycheck-pycheckers
+  ;;   :ensure t
+  ;;   :config
+  ;;   (progn
+  ;; 	(with-eval-after-load 'flycheck
+  ;; 	  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+  ;; 	)
+  ;;   )
+#+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
@@ -304,9 +314,9 @@
 	  )
 	(set-variable 'ycmd-server-command '("python3"
 										 "/media/ubu/data/Downloads/emacs/ycmd/ycmd/"))
-	;; (add-hook 'after-init-hook #'global-ycmd-mode)
-	(dolist (hooks '(c-mode-hook c++-mode_hook csharp-mode-hook java-mode-hook
-								 python-mode-hook go-mode-hook))
+	(set-variable 'ycmd-global-config
+				  "/media/ubu/data/Downloads/emacs/ycmd/.ycm_extra_conf.py")
+	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook))
 	  (add-hook hooks 'ycmd-mode))
 	)
 
@@ -466,7 +476,7 @@
 
 ** Define my cc-mode style
    #+BEGIN_SRC emacs-lisp
-	 (setq-default c-default-style "linux"
+	 (setq-default c-default-style "k&r"
 		   c-basic-offset 4
 		   tab-width 4
 		   indent-tabs-mode t
@@ -534,6 +544,19 @@
   (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
 											   comment-end   " */") ) )
 #+END_SRC
+** Clang-format
+#+BEGIN_SRC emacs-lisp
+  (use-package clang-format
+	:ensure t
+	:config
+	(progn
+	  (require 'clang-format)
+	  (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook javascript-mode-hook))
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
+		)
+	  )
+	)
+#+END_SRC
 * Color for TODO, NOTE
   #+BEGIN_SRC emacs-lisp
     ;; Bright-red TODOs
@@ -573,3 +596,14 @@
 	 (winner-mode 1)
 	 (windmove-default-keybindings)
    #+END_SRC
+** Kill all buffers
+#+BEGIN_SRC emacs-lisp
+  (defun kill-other-buffers ()
+	"Kill all other buffers"
+	(interactive)
+	(mapc 'kill-buffer
+		  (delq (current-buffer)
+				(remove-if-not 'buffer-file-name (buffer-list))
+				))
+	)
+#+END_SRC
