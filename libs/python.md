@@ -8,6 +8,9 @@ ___
 - **shelve** - 
 - **shutil** - *Shell utilities, work with files*
 - **random** - 
+- **logging** - 
+- **traceback** - 
+- **webbrowser** - 
 
 ___
 
@@ -17,4 +20,6 @@ ___
 - **pprint** - 
 - **send2trash** - 
 - **zipfile** - 
+
+<!-- requests, beautiful soup, selenium -->
 
