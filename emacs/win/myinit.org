@@ -23,236 +23,6 @@
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
    #+END_SRC
-* Disable backup and autosave
-  #+BEGIN_SRC emacs-lisp
-
-    (setq backup-inhibited t)
-    (setq auto-save-default nil)
-
-  #+END_SRC
-* Font
-#+BEGIN_SRC emacs-lisp
-
-  (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
-  (set-face-attribute 'default t :font "Liberation Mono 11")
-
-#+END_SRC
-
-* Controll in code
-** Auto revert buffer
-#+BEGIN_SRC emacs-lisp
-  (global-auto-revert-mode t)
-  (add-hook 'dired-mode-hook 'auto-revert-mode)
-#+END_SRC
-** Add to auto mode alist .h of c-mode
-   #+BEGIN_SRC emacs-lisp
-	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c-mode))
-	 (add-to-list 'auto-mode-alist ' ("\\.hpp\\'" . c++-mode))
-   #+END_SRC
-
-** Define my cc-mode style
-   #+BEGIN_SRC emacs-lisp
-	 (setq-default c-default-style "linux"
-		   c-basic-offset 4
-		   tab-width 4
-		   indent-tabs-mode t)
-
-	 (defun my-c-mode-hook ()
-	   (c-set-offset 'substatement-open '0)
-	   (c-set-offset 'inline-open '0)
-	   (c-set-offset 'innamespace '*)
-	   (c-set-offset 'inextern-lang '*)
-	   (c-set-offset 'label '*)
-	   (c-set-offset 'case-label '*)
-	   (c-set-offset 'access-label '/)
-	   )
-
-	 (dolist (hooks `(c-mode-hook 
-					  cc-mode-hook
-					  c++-mode-hook
-					  csharp-mode-hook
-					  ))
-	   (add-hook hooks 'my-c-mode-hook))
-   #+END_SRC
-** Move line
-   Use M-<up> and M-<down> to move lines
-   #+BEGIN_SRC emacs-lisp
-
-(defun move-line (n)
-  "Move the current line up or down by N lines."
-  (interactive "p")
-  (setq col (current-column))
-  (beginning-of-line) (setq start (point))
-  (end-of-line) (forward-char) (setq end (point))
-  (let ((line-text (delete-and-extract-region start end)))
-    (forward-line n)
-    (insert line-text)
-    ;; restore point to original column in moved line
-    (forward-line -1)
-    (forward-char col)))
-
-(defun move-line-up (n)
-  "Move the current line up by N lines."
-  (interactive "p")
-  (move-line (if (null n) -1 (- n))))
-
-(defun move-line-down (n)
-  "Move the current line down by N lines."
-  (interactive "p")
-  (move-line (if (null n) 1 n)))
-
-(global-set-key (kbd "M-<up>") 'move-line-up)
-(global-set-key (kbd "M-<down>") 'move-line-down)
-
-   #+END_SRC
-
-** conf-mode-hook tabs
-   #+BEGIN_SRC emacs-lisp
-	 (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
-   #+END_SRC
-** comment
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
-											comment-end   " */") ) )
-  (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
-										   comment-end   " */") ) )
-  (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
-											   comment-end   " */") ) )
-#+END_SRC
-* Color for TODO, NOTE
-  #+BEGIN_SRC emacs-lisp
-    ;; Bright-red TODOs
-    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
-    (make-face 'font-lock-fixme-face)
-    (make-face 'font-lock-note-face)
-    (mapc (lambda (mode)
-            (font-lock-add-keywords
-             mode
-             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-          fixme-modes)
-    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
-    (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
-  #+END_SRC
-
-* gdb
-  #+BEGIN_SRC emacs-lisp 
-	;; Mark breakpoint 
-	(require 'gud)
-	(define-key gud-mode-map (kbd "C-c SPC") 'gub-break)
-  #+END_SRC
-* Line definition
-#+BEGIN_SRC emacs-lisp
-
-  (global-hl-line-mode 1)
-  (set-face-background 'hl-line "#333333")
-  (set-face-foreground 'highlight nil)
-  (set-face-attribute hl-line-face nil :underline nil)
-
-#+END_SRC
-* Comfortable using
-** ido
-   #+BEGIN_SRC emacs-lisp
-
-     (setq indo-enable-flex-matching t)
-     (setq ido-everywhere t)
-     (ido-mode 1)
-
-   #+END_SRC
-** Winner mode 
-   Use C-<left>, C-<right>
-   Use S-<up>, S-<right>, S-<down>, S-<left>
-   #+BEGIN_SRC emacs-lisp
-
-	 (winner-mode 1)
-	 (windmove-default-keybindings)
-
-   #+END_SRC
-
-* Org mode
-** Config org mode
-  Activation org mode
-  Definition global keys
-  #+BEGIN_SRC emacs-lisp
-    (require 'org)
-
-    (global-set-key "\C-cl" 'org-store-link)
-    (global-set-key "\C-ca" 'org-agenda)
-    (global-set-key "\C-cc" 'org-capture)
-    (global-set-key "\C-cb" 'org-switch)
-    (setq org-log-done t)
-
-    (require 'ob-emacs-lisp)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)))
-  #+END_SRC
-** Google calendar
-   #+BEGIN_SRC emacs-lisp
-	 (setq package-check-signarure nil)
-
-	 (use-package org-gcal
-	   :ensure t
-	   :config
-	   (setq org-gcal-client-id "3784406070-69cr5fjlnds9qnar0d7g3rbelrb8s9ql.apps.googleusercontent.com"
-			 org-gcal-client-secret "OWWg2jQrVjVJCx21wQqHKyJC"
-			 org-gcal-file-alist '(("opil9496@gmail.com" . "~/MEGAsync/orgfiles/gcal.org")) ))
-
-	 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-	 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
-   #+END_SRC
-
-   #+RESULTS:
-   | lambda | nil | (org-gcal-sync) |
-
-** Org-agenda-files
-   #+BEGIN_SRC emacs-lisp
-     (setq org-agenda-files (list "~/MEGAsync/orgfiles/gcal.org"
-                                  "~/MEGAsync/orgfiles/i.org"))
-   #+END_SRC
-
-   #+RESULTS:
-   | ~/MEGAsync/orgfiles/gcal.org | ~/MEGAsync/orgfiles/i.org |
-
-** Org-capture-templates
-   #+BEGIN_SRC emacs-lisp
-     (setq org-capture-templates
-           '(("a" "Appointment" entry (file+headline "~/MEGAsync/orgfiles/gcal.org" "Appointments")
-              "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-             ("n" "Note" entry (file+headline "~/MEGAsync/orgfiles/notes.org" "Notes")
-              "* Note %?\n%T")
-             ("l" "Link" entry (file+headline "~/MEGAsync/orgfiles/links.org" "Links")
-              "* %? %^L %^g \n%T" :prepend t)
-             ("t" "To Do Item" entry (file+headline "~/MEGAsync/orgfiles/i.org" "To Do Items")
-              "* %?\n%T" :prepand t)))
-   #+END_SRC
-
-   #+RESULTS:
-   | a | Appointment | entry | (file+headline ~/MEGAsync/orgfiles/gcal.org Appointments) | * TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n |          |   |
-   | n | Note        | entry | (file+headline ~/MEGAsync/orgfiles/notes.org Notes)       | * Note %?\n%T                                           |          |   |
-   | l | Link        | entry | (file+headline ~/MEGAsync/orgfiles/links.org Links)       | * %? %^L %^g \n%T                                       | :prepend | t |
-   | t | To Do Item  | entry | (file+headline ~/MEGAsync/orgfiles/i.org To Do Items)     | * %?\n%T                                                | :prepand | t |
-
-** Org bullets
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets
-       :ensure t
-       :config
-       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-   #+END_SRC
-
-** org-ac
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-ac
-       :ensure t
-       :init (progn
-               (require 'org-ac)
-               (org-ac/config-default)
-               ))
-   #+END_SRC
-
-   #+RESULTS:
 * Packages
 ** Try
    Provides use package without installing
@@ -269,19 +39,6 @@
 	 (use-package which-key
 	   :ensure t
 	   :config (which-key-mode))
-
-   #+END_SRC
-
-** Auto complete
-   #+BEGIN_SRC emacs-lisp
-
-	 (use-package auto-complete
-	   :ensure t
-	   :init
-	   (progn
-		 (ac-config-default)
-		 (global-auto-complete-mode t)
-		 ))
 
    #+END_SRC
 
@@ -368,41 +125,80 @@
 
    #+END_SRC
 
-** Flycheck
+** Flycheck after
    #+BEGIN_SRC emacs-lisp
 	 (use-package flycheck
 	   :ensure t
-	   :init
-	   (global-flycheck-mode t)
+	   :init (global-flycheck-mode t)
+	   :config
+	   (progn
+		 (when (not (display-graphic-p))
+		   (setq flycheck-indication-mode nil))
+		 (add-to-list 'flycheck-disabled-checkers 'c/c++-gcc)
+		 (add-to-list 'flycheck-disabled-checkers 'c/c++-clang)
+		 )
 	   )
-	 (setq-default flycheck-disabled-checkers '(c/c++-gcc))
 
 	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
 	   (add-hook my_hooks
-				 (lambda () (setq flycheck-gcc-include-path
-								  (list
-								   (expand-file-name "D:/Documents/libs/third_part_libs"))
-								  ))))
+				 (lambda ()
+				   (setq flycheck-cppcheck-include-path
+						 (list
+						  (expand-file-name "D:/Documents/docs/libs/third_part_libs")
+						  ))) ))
    #+END_SRC
    
    #+RESULTS:
-   
-*** flycheck-pkg-config
-	Extension for C/C++ mode
-   #+BEGIN_SRC emacs-lisp
-	 ;;(use-package flycheck-pkg-config
-	 ;;  :ensure t
-	 ;;  :init)
-   #+END_SRC
+*** Rust
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-rust
+	:ensure t
+	:init
+	(progn
+	  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+	  )
+	)
+#+END_SRC
+*** Golang
+	#+BEGIN_SRC emacs-lisp
+	  (use-package flycheck-gometalinter
+		:ensure t
+		:init
+		(progn
+		  (flycheck-gometalinter-setup)
+		  ;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
+		  (setq flycheck-gometalinter-vendor t)
+		  ;; only show errors
+		  (setq flycheck-gometalinter-errors-only t)
+		  ;; only run fast linters
+		  (setq flycheck-gometalinter-fast t)
+		  ;; use in tests files
+		  (setq flycheck-gometalinter-test t)
+		  ;; disable linters
+		  (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
+		  ;; Only enable selected linters
+		  (setq flycheck-gometalinter-disable-all t)
+		  (setq flycheck-gometalinter-enable-linters '("golint"))
+		  ;; Set different deadline (default: 5s)
+		  (setq flycheck-gometalinter-deadline "10s")
+		  )
+		)
+	#+END_SRC
+*** C/C++
+	#+BEGIN_SRC emacs-lisp
+	  ;; flycheck-pkg-config						
+	  (use-package flycheck-pkg-config
+		:ensure t
+		:init )
+	#+END_SRC
 
-*** flycheck-checkbashisms
-	Extension for SHELL
-   #+BEGIN_SRC emacs-lisp
-	 (use-package flycheck-checkbashisms
-	   :ensure t
-	   :config
-	   (flycheck-checkbashisms-setup))
-   #+END_SRC
+*** Shell
+	#+BEGIN_SRC emacs-lisp
+     (use-package flycheck-checkbashisms
+       :ensure t
+       :config
+       (flycheck-checkbashisms-setup))
+	#+END_SRC
 	
 ** Hungry delete
    Delete all blank space before any symbol
@@ -449,14 +245,6 @@
 	  )
 	)
 #+END_SRC
-n** Smartparens
-#+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-	:ensure t
-	:init
-	(smartparens-global-mode t)
-	)
-#+END_SRC
 ** GLSL mode
 #+BEGIN_SRC emacs-lisp
   (use-package glsl-mode
@@ -468,5 +256,362 @@ n** Smartparens
 	  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 	  (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
 	  )
+	)
+#+END_SRC
+** Smartparens
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+	:ensure t
+	:init
+	(smartparens-global-mode t)
+	)
+#+END_SRC
+** Go-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+	:ensure t
+	:init
+	(progn
+	  (setq gofmt-command "goimports")
+	  (add-hook 'before-save-hook 'gofmt-before-save)
+	  )
+   )
+#+END_SRC
+** Markdown-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+	:ensure t
+	:commands (markdown-mode gfm-mode)
+	:mode (
+		   ("README\\.md\\'" . gfm-mode)
+		   ("\\.md\\'" . markdown-mode)
+		   ("\\.markdown\\'" . markdown-mode)
+		   )
+	:init
+	(progn
+	  (setq markdown-command "pandoc")
+	  )
+	)
+#+END_SRC
+** Emacs-ycmd
+#+BEGIN_SRC emacs-lisp
+  (use-package ycmd
+	:ensure t
+	:init
+	(progn
+	  (require 'ycmd-eldoc)
+	  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+	  )
+	(set-variable 'ycmd-server-command '("python"
+						 "D:/Downloads/emacs/ycmd_win/ycmd"))
+	(set-variable 'ycmd-global-config
+				  "D:/Downloads/emacs/ycmd_win/.ycm_extra_conf.py")
+	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook
+								 rust-mode-hook))
+	  (add-hook hooks 'ycmd-mode))
+	)
+
+  (use-package company-ycmd
+	:ensure t
+	:init (company-ycmd-setup)
+	)
+
+  (use-package flycheck-ycmd
+	:ensure t
+	:init (flycheck-ycmd-setup)
+	:config
+	(add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
+	(add-to-list 'flycheck-checkers 'ycmd)
+	)
+#+END_SRC
+** Rust-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+	:ensure t
+	:init
+	(progn
+	  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+	  (setq rust-format-on-save t)
+	  )
+	)
+#+END_SRC
+** Rust: Emacs-racer
+#+BEGIN_SRC emacs-lisp
+  (use-package racer
+	:ensure t
+	:init
+	(progn
+	  (setq racer-rust-src-path "c:/Users/win/.rustup/toolchains/stable-x86_64-pc-windows-msvc/lib/rustlib/src/rust/src")
+	  )
+	:config
+	(add-hook 'rust-mode-hook #'racer-mode)
+	(add-hook 'racer-mode-hook #'company-mode)
+	)
+#+END_SRC
+** Eldoc
+#+BEGIN_SRC emacs-lisp
+  (use-package eldoc
+	:ensure t
+	:config
+	(add-hook 'ycmd-mode-hook #'eldoc-mode)
+	(add-hook 'racer-mode-hook #'eldoc-mode)
+	)
+#+END_SRC
+** NeoTree
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+	:ensure t
+	:init
+	(progn
+	  (global-set-key [f8] 'neotree-toggle))
+  )
+#+END_SRC
+* Org mode
+** Config org mode
+  Activation org mode
+  Definition global keys
+  #+BEGIN_SRC emacs-lisp
+    (require 'org)
+
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-cc" 'org-capture)
+    (global-set-key "\C-cb" 'org-switch)
+    (setq org-log-done t)
+
+    (require 'ob-emacs-lisp)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)))
+  #+END_SRC
+** Google calendar
+   #+BEGIN_SRC emacs-lisp
+	 (setq package-check-signarure nil)
+
+	 (use-package org-gcal
+	   :ensure t
+	   :config
+	   (setq org-gcal-client-id "3784406070-69cr5fjlnds9qnar0d7g3rbelrb8s9ql.apps.googleusercontent.com"
+			 org-gcal-client-secret "OWWg2jQrVjVJCx21wQqHKyJC"
+			 org-gcal-file-alist '(("opil9496@gmail.com" . "~/MEGAsync/orgfiles/gcal.org")) ))
+
+	 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+	 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+   #+END_SRC
+
+   #+RESULTS:
+   | lambda | nil | (org-gcal-sync) |
+
+** Org-agenda-files
+   #+BEGIN_SRC emacs-lisp
+     (setq org-agenda-files (list "~/MEGAsync/orgfiles/gcal.org"
+                                  "~/MEGAsync/orgfiles/i.org"))
+   #+END_SRC
+
+   #+RESULTS:
+   | ~/MEGAsync/orgfiles/gcal.org | ~/MEGAsync/orgfiles/i.org |
+
+** Org-capture-templates
+   #+BEGIN_SRC emacs-lisp
+     (setq org-capture-templates
+           '(("a" "Appointment" entry (file+headline "~/MEGAsync/orgfiles/gcal.org" "Appointments")
+              "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
+             ("n" "Note" entry (file+headline "~/MEGAsync/orgfiles/notes.org" "Notes")
+              "* Note %?\n%T")
+             ("l" "Link" entry (file+headline "~/MEGAsync/orgfiles/links.org" "Links")
+              "* %? %^L %^g \n%T" :prepend t)
+             ("t" "To Do Item" entry (file+headline "~/MEGAsync/orgfiles/i.org" "To Do Items")
+              "* %?\n%T" :prepand t)))
+   #+END_SRC
+
+   #+RESULTS:
+   | a | Appointment | entry | (file+headline ~/MEGAsync/orgfiles/gcal.org Appointments) | * TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n |          |   |
+   | n | Note        | entry | (file+headline ~/MEGAsync/orgfiles/notes.org Notes)       | * Note %?\n%T                                           |          |   |
+   | l | Link        | entry | (file+headline ~/MEGAsync/orgfiles/links.org Links)       | * %? %^L %^g \n%T                                       | :prepend | t |
+   | t | To Do Item  | entry | (file+headline ~/MEGAsync/orgfiles/i.org To Do Items)     | * %?\n%T                                                | :prepand | t |
+
+** Org bullets
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+   #+END_SRC
+
+** org-ac
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-ac
+       :ensure t
+       :init (progn
+               (require 'org-ac)
+               (org-ac/config-default)
+               ))
+   #+END_SRC
+
+   #+RESULTS:
+* Font
+#+BEGIN_SRC emacs-lisp
+
+  (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
+  (set-face-attribute 'default t :font "Liberation Mono 11")
+
+#+END_SRC
+* Disable backup and autosave
+  #+BEGIN_SRC emacs-lisp
+
+    (setq backup-inhibited t)
+    (setq auto-save-default nil)
+
+  #+END_SRC
+
+* Controll in code
+** Auto revert buffer
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
+  (add-hook 'dired-mode-hook 'auto-revert-mode)
+#+END_SRC
+** Add to auto mode alist .h of c-mode
+   #+BEGIN_SRC emacs-lisp
+	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c++-mode))
+	 (add-to-list 'auto-mode-alist ' ("\\.hpp\\'" . c++-mode))
+   #+END_SRC
+
+** Define my cc-mode style
+   #+BEGIN_SRC emacs-lisp
+	 (setq-default c-default-style "k&r"
+		   c-basic-offset 4
+		   tab-width 4
+		   indent-tabs-mode t)
+
+	 (defun my-c-mode-hook ()
+	   (c-set-offset 'substatement-open '0)
+	   (c-set-offset 'inline-open '0)
+	   (c-set-offset 'innamespace '*)
+	   (c-set-offset 'inextern-lang '*)
+	   (c-set-offset 'label '*)
+	   (c-set-offset 'case-label '*)
+	   (c-set-offset 'access-label '/)
+	   )
+
+	 (dolist (hooks `(c-mode-hook 
+					  cc-mode-hook
+					  c++-mode-hook
+					  csharp-mode-hook
+					  ))
+	   (add-hook hooks 'my-c-mode-hook))
+   #+END_SRC
+** Move line
+   Use M-<up> and M-<down> to move lines
+   #+BEGIN_SRC emacs-lisp
+
+(defun move-line (n)
+  "Move the current line up or down by N lines."
+  (interactive "p")
+  (setq col (current-column))
+  (beginning-of-line) (setq start (point))
+  (end-of-line) (forward-char) (setq end (point))
+  (let ((line-text (delete-and-extract-region start end)))
+    (forward-line n)
+    (insert line-text)
+    ;; restore point to original column in moved line
+    (forward-line -1)
+    (forward-char col)))
+
+(defun move-line-up (n)
+  "Move the current line up by N lines."
+  (interactive "p")
+  (move-line (if (null n) -1 (- n))))
+
+(defun move-line-down (n)
+  "Move the current line down by N lines."
+  (interactive "p")
+  (move-line (if (null n) 1 n)))
+
+(global-set-key (kbd "M-<up>") 'move-line-up)
+(global-set-key (kbd "M-<down>") 'move-line-down)
+
+   #+END_SRC
+
+** conf-mode-hook tabs
+   #+BEGIN_SRC emacs-lisp
+	 (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
+   #+END_SRC
+** comment
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
+											comment-end   " */") ) )
+  (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
+										   comment-end   " */") ) )
+  (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
+											   comment-end   " */") ) )
+#+END_SRC
+** Clang-format
+#+BEGIN_SRC emacs-lisp
+  (use-package clang-format
+	:ensure t
+	:config
+	(progn
+	  (require 'clang-format)
+	  (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook javascript-mode-hook))
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
+		)
+	  )
+	)
+#+END_SRC
+
+* Color for TODO, NOTE
+  #+BEGIN_SRC emacs-lisp
+    ;; Bright-red TODOs
+    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+    (make-face 'font-lock-fixme-face)
+    (make-face 'font-lock-note-face)
+    (mapc (lambda (mode)
+            (font-lock-add-keywords
+             mode
+             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+          fixme-modes)
+    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+    (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
+  #+END_SRC
+
+* Line definition
+#+BEGIN_SRC emacs-lisp
+
+  (global-hl-line-mode 1)
+  (set-face-background 'hl-line "#333333")
+  (set-face-foreground 'highlight nil)
+  (set-face-attribute hl-line-face nil :underline nil)
+
+#+END_SRC
+* Comfortable using
+** ido
+   #+BEGIN_SRC emacs-lisp
+
+     (setq indo-enable-flex-matching t)
+     (setq ido-everywhere t)
+     (ido-mode 1)
+
+   #+END_SRC
+** Winner mode 
+   Use C-<left>, C-<right>
+   Use S-<up>, S-<right>, S-<down>, S-<left>
+   #+BEGIN_SRC emacs-lisp
+
+	 (winner-mode 1)
+	 (windmove-default-keybindings)
+
+   #+END_SRC
+
+** Kill all buffers
+#+BEGIN_SRC emacs-lisp
+  (defun kill-other-buffers ()
+	"Kill all other buffers"
+	(interactive)
+	(mapc 'kill-buffer
+		  (delq (current-buffer)
+				(remove-if-not 'buffer-file-name (buffer-list))
+				))
 	)
 #+END_SRC

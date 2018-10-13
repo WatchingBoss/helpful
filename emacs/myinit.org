@@ -271,6 +271,20 @@
 	  )
 	)
 #+END_SRC
+** GLSL mode
+#+BEGIN_SRC emacs-lisp
+  (use-package glsl-mode
+	:ensure t
+	:init
+	(progn
+	  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+	  (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
+	  )
+	)
+
+#+END_SRC
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
