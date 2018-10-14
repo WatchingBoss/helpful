@@ -125,27 +125,28 @@
 
    #+END_SRC
 
-** Flycheck after
+** Flycheck
    #+BEGIN_SRC emacs-lisp
-	 (use-package flycheck
-	   :ensure t
-	   :init (global-flycheck-mode t)
-	   :config
-	   (progn
-		 (when (not (display-graphic-p))
-		   (setq flycheck-indication-mode nil))
-		 (add-to-list 'flycheck-disabled-checkers 'c/c++-gcc)
-		 (add-to-list 'flycheck-disabled-checkers 'c/c++-clang)
-		 )
-	   )
+		  (use-package flycheck
+			:ensure t
+			:init (global-flycheck-mode t)
+			:config
+			(progn
+			  (setq flycheck-python-flake8-executable "flake8")
+			  (when (not (display-graphic-p))
+				(setq flycheck-indication-mode nil))
+			  )
+			)
 
-	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
-	   (add-hook my_hooks
-				 (lambda ()
-				   (setq flycheck-cppcheck-include-path
-						 (list
-						  (expand-file-name "D:/Documents/docs/libs/third_part_libs")
-						  ))) ))
+		  (dolist (my_hooks '(c-mode-hook c++-mode-hook))
+			(add-hook my_hooks
+					  (lambda ()
+						(setq flycheck-cppcheck-include-path
+							  (list "D:/Documents/docs/libs/third_part_libs"
+									"D:/Documents/libs/open_gl/include"
+									)))
+					  )
+			)
    #+END_SRC
    
    #+RESULTS:
@@ -189,7 +190,7 @@
 	  ;; flycheck-pkg-config						
 	  (use-package flycheck-pkg-config
 		:ensure t
-		:init )
+		)
 	#+END_SRC
 
 *** Shell
@@ -302,12 +303,12 @@
 	  (require 'ycmd-eldoc)
 	  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
 	  )
-	(set-variable 'ycmd-server-command '("python"
-						 "D:/Downloads/emacs/ycmd_win/ycmd"))
-	(set-variable 'ycmd-global-config
-				  "D:/Downloads/emacs/ycmd_win/.ycm_extra_conf.py")
-	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook
-								 rust-mode-hook))
+	(setq ycmd-server-command '("python" "-u"
+								"D:/Downloads/emacs/ycmd_win/ycmd"))
+	(setq ycmd-global-config
+		  "D:/Downloads/emacs/ycmd_win/.ycm_extra_conf.py")
+	; rust-mode-hook
+	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook))
 	  (add-hook hooks 'ycmd-mode))
 	)
 
@@ -322,6 +323,13 @@
 	:config
 	(add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
 	(add-to-list 'flycheck-checkers 'ycmd)
+	(add-hook 'c-mode-hook (lambda ()
+							 (add-to-list 'flycheck-disabled-checkers 'ycmd)))
+	(add-hook 'c++-mode-hook (lambda ()
+							   (add-to-list 'flycheck-disabled-checkers 'ycmd)))
+	(add-hook 'flycheck-disabled-checkers 'c/c++-clang)
+	(add-hook 'flycheck-disabled-checkers 'c/c++-gcc)
+	(add-hook 'flycheck-disabled-checkers 'c/c++-cppcheck)
 	)
 #+END_SRC
 ** Rust-mode
