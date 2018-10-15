@@ -11,6 +11,7 @@ ___
 - **logging** - 
 - **traceback** - 
 - **webbrowser** - 
+- **urllib.request** - 
 
 ___
 
@@ -20,6 +21,10 @@ ___
 - **pprint** - 
 - **send2trash** - 
 - **zipfile** - 
+- **openpyxl** - 
+- **requests** - 
+- **beautifulSoup** - 
+- **urllib3** - 
 
 <!-- requests, beautiful soup, selenium -->
 
