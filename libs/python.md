@@ -25,6 +25,8 @@ ___
 - **requests** - 
 - **beautifulSoup** - 
 - **urllib3** - 
+- **PyPDF2** - 
+- **python_docx** - library for creating and updating Microsoft Word (.docx) files
 
 <!-- requests, beautiful soup, selenium -->
 
