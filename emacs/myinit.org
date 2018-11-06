@@ -14,6 +14,7 @@
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
+  (setq-default column-number-mode t)
 
 #+END_SRC
 
@@ -23,7 +24,7 @@
    #+END_SRC
 ** Line wrapping
 #+BEGIN_SRC emacs-lisp
-  (setq-default word-wr t)
+  (setq-default word-wrap t)
 #+END_SRC
 * Packages
 ** Try
@@ -560,6 +561,7 @@
 	  (require 'clang-format)
 	  (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook javascript-mode-hook))
 		(add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-|") #'clang-format-buffer)))
 		)
 	  )
 	)

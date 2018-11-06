@@ -5,6 +5,8 @@ ___
 - **os** - 
 - **re** - *This module provides regular expression matching operations*
 - **sys** - 
+- **csv** - 
+- **json** - 
 - **shelve** - 
 - **shutil** - *Shell utilities, work with files*
 - **random** - 

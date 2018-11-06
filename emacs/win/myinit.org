@@ -127,26 +127,17 @@
 
 ** Flycheck
    #+BEGIN_SRC emacs-lisp
-		  (use-package flycheck
-			:ensure t
-			:init (global-flycheck-mode t)
-			:config
-			(progn
-			  (setq flycheck-python-flake8-executable "flake8")
-			  (when (not (display-graphic-p))
-				(setq flycheck-indication-mode nil))
-			  )
-			)
-
-		  (dolist (my_hooks '(c-mode-hook c++-mode-hook))
-			(add-hook my_hooks
-					  (lambda ()
-						(setq flycheck-cppcheck-include-path
-							  (list "D:/Documents/docs/libs/third_part_libs"
-									"D:/Documents/libs/open_gl/include"
-									)))
-					  )
-			)
+	 (use-package flycheck
+	   :ensure t
+	   :init (global-flycheck-mode t)
+	   :config
+	   (progn
+		 (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+		 (setq flycheck-python-pylint-executable "pylint")
+		 (when (not (display-graphic-p))
+		   (setq flycheck-indication-mode nil))
+		 )
+	   )
    #+END_SRC
    
    #+RESULTS:
@@ -188,9 +179,9 @@
 *** C/C++
 	#+BEGIN_SRC emacs-lisp
 	  ;; flycheck-pkg-config						
-	  (use-package flycheck-pkg-config
-		:ensure t
-		)
+	  ;; (use-package flycheck-pkg-config
+	  ;;   :ensure t
+	  ;;   )
 	#+END_SRC
 
 *** Shell
@@ -321,15 +312,9 @@
 	:ensure t
 	:init (flycheck-ycmd-setup)
 	:config
-	(add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
-	(add-to-list 'flycheck-checkers 'ycmd)
-	(add-hook 'c-mode-hook (lambda ()
-							 (add-to-list 'flycheck-disabled-checkers 'ycmd)))
-	(add-hook 'c++-mode-hook (lambda ()
-							   (add-to-list 'flycheck-disabled-checkers 'ycmd)))
-	(add-hook 'flycheck-disabled-checkers 'c/c++-clang)
-	(add-hook 'flycheck-disabled-checkers 'c/c++-gcc)
-	(add-hook 'flycheck-disabled-checkers 'c/c++-cppcheck)
+	(progn
+	  (add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
+	  (add-to-list 'flycheck-checkers 'ycmd))
 	)
 #+END_SRC
 ** Rust-mode
@@ -461,8 +446,8 @@
 * Font
 #+BEGIN_SRC emacs-lisp
 
-  (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
-  (set-face-attribute 'default t :font "Liberation Mono 11")
+  (add-to-list 'default-frame-alist '(font . "Liberation Mono 10"))
+  (set-face-attribute 'default t :font "Liberation Mono 10")
 
 #+END_SRC
 * Disable backup and autosave
@@ -495,7 +480,7 @@
 	 (defun my-c-mode-hook ()
 	   (c-set-offset 'substatement-open '0)
 	   (c-set-offset 'inline-open '0)
-	   (c-set-offset 'innamespace '*)
+	   (c-set-offset 'innamespace '0)
 	   (c-set-offset 'inextern-lang '*)
 	   (c-set-offset 'label '*)
 	   (c-set-offset 'case-label '*)
@@ -563,6 +548,7 @@
 	  (require 'clang-format)
 	  (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook javascript-mode-hook))
 		(add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-|") #'clang-format-buffer)))
 		)
 	  )
 	)
