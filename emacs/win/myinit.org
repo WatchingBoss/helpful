@@ -132,7 +132,8 @@
 	   :init (global-flycheck-mode t)
 	   :config
 	   (progn
-		 (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+	 ;;	(setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+		 (setq-default flycheck-disabled-checkers '(c/c++-gcc))
 		 (setq flycheck-python-pylint-executable "pylint")
 		 (when (not (display-graphic-p))
 		   (setq flycheck-indication-mode nil))
@@ -424,11 +425,12 @@
    | t | To Do Item  | entry | (file+headline ~/MEGAsync/orgfiles/i.org To Do Items)     | * %?\n%T                                                | :prepand | t |
 
 ** Org bullets
+Make org mode slower on Windows
    #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets
-       :ensure t
-       :config
-       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+	 ;; (use-package org-bullets
+	 ;;   :ensure t
+	 ;;   :config
+	 ;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
    #+END_SRC
 
@@ -532,12 +534,13 @@
    #+END_SRC
 ** comment
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
-											comment-end   " */") ) )
-  (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
-										   comment-end   " */") ) )
-  (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
-											   comment-end   " */") ) )
+  (dolist (hooks '(c-mode-hook
+				   c++-mode-hook
+				   csharp-mode-hook
+				   java-mode-hook))
+	(add-hook hooks (lambda () (setq comment-start "// "
+									 comment-end   "")))
+	)
 #+END_SRC
 ** Clang-format
 #+BEGIN_SRC emacs-lisp
