@@ -1,0 +1,36 @@
+* Python modules
+* Standard library
+** os
+** re
+   Provides regular expression matching operations
+** sys
+** csv
+** json
+** shelve
+** shutil
+   Shell utilities, work with files
+** random
+** logging
+** traceback
+** webbrowser
+** urllib.request
+** time
+** datetime
+** threading
+
+* Third party modules
+** Web app
+*** flask
+	A simple framework for building complex web applications
+*** django
+** pprint
+** send2trash
+** zipfile
+** requests
+** beautifulSoup
+** urllib3
+** Documents
+*** openpyxl
+*** PyPDF2
+*** python_docx
+	Library for creating and updating Microsoft Word (.docx) files
