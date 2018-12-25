@@ -17,6 +17,7 @@
 ** time
 ** datetime
 ** threading
+** subprocess
 
 * Third party modules
 ** Web app
