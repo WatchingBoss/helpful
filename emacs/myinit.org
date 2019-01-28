@@ -144,13 +144,38 @@
 		 )
 	   )
 
-	 (dolist (my_hooks '(c-mode-hook cc-mode-hook c++-mode-hook))
+	 (dolist (my_hooks '(c-mode-hook c++-mode-hook))
 	   (add-hook my_hooks
 				 (lambda ()
 				   (setq flycheck-gcc-include-path
 						 (list
-						  (expand-file-name "~/Documents/docs/libs/third_part_libs")
-						  (expand-file-name "/usr/local/include")
+						  ;; Different third party libs
+						  "/home/ubu/Documents/docs/libs/third_part_libs"
+						  ;; Boost
+						  "/usr/local/include"
+						  ;; GTK+3
+						  "/usr/include/gtk-3.0"
+						  "usr/include/at-spi2-atk/2.0"
+						  "/usr/include/at-spi-2.0"
+						  "/usr/include/dbus-1.0"
+						  "/usr/lib/x86_64-linux-gnu/dbus-1.0/include"
+						  "/usr/include/gtk-3.0"
+						  "/usr/include/gio-unix-2.0/"
+						  "/usr/include/cairo"
+						  "/usr/include/pango-1.0"
+						  "/usr/include/harfbuzz"
+						  "/usr/include/pango-1.0"
+						  "/usr/include/atk-1.0"
+						  "/usr/include/cairo"
+						  "/usr/include/pixman-1"
+						  "/usr/include/freetype2"
+						  "/usr/include/libpng16"
+						  "/usr/include/freetype2"
+						  "/usr/include/libpng16"
+						  "/usr/include/gdk-pixbuf-2.0"
+						  "/usr/include/libpng16"
+						  "/usr/include/glib-2.0"
+						  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
 						  ))) ))
    #+END_SRC
    
@@ -312,34 +337,35 @@
 #+END_SRC
 ** Emacs-ycmd
 #+BEGIN_SRC emacs-lisp
-	(use-package ycmd
-	  :ensure t
-	  :init
-	  (progn
-		(require 'ycmd-eldoc)
-		(add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
-		)
-	  (set-variable 'ycmd-server-command '("python3"
-										   "/media/ubu/data/Downloads/emacs/ycmd/ycmd/"))
-	  (set-variable 'ycmd-global-config
-					"/media/ubu/data/Downloads/emacs/ycmd/.ycm_extra_conf.py")
-	  (dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook))
-		(add-hook hooks 'ycmd-mode))
+  (use-package ycmd
+	:ensure t
+	:init
+	(progn
+	  (require 'ycmd-eldoc)
+	  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
 	  )
+	(set-variable 'ycmd-server-command '("python3"
+										 "/media/ubu/data/Downloads/emacs/ycmd/ycmd/"))
+	(set-variable 'ycmd-global-config
+				  "/media/ubu/data/Downloads/emacs/ycmd/.global_config.py")
+	(set-variable 'ycmd-extra-conf-handler 'load)
+	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook))
+	  (add-hook hooks 'ycmd-mode))
+	)
 
-	(use-package company-ycmd
-	  :ensure t
-	  :init (company-ycmd-setup)
-	  )
+  (use-package company-ycmd
+	:ensure t
+	:init (company-ycmd-setup)
+	)
 
-	(use-package flycheck-ycmd
-	  :ensure t
-	  :init
-	  (progn
-		(add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
-		(add-to-list 'flycheck-checkers 'ycmd)
-		)
+  (use-package flycheck-ycmd
+	:ensure t
+	:init
+	(progn
+	  (add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
+	  (add-to-list 'flycheck-checkers 'ycmd)
 	  )
+	)
 #+END_SRC
 ** Rust-mode
 #+BEGIN_SRC emacs-lisp
@@ -393,6 +419,12 @@
 	  (setq org-pandoc-options '((standalone . t)))
 	  )
 	)
+#+END_SRC
+** Ox-hugo
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-hugo
+	:ensure t
+	:after ox)
 #+END_SRC
 * Org mode
 ** Config org mode
@@ -630,4 +662,15 @@
 				(remove-if-not 'buffer-file-name (buffer-list))
 				))
 	)
+#+END_SRC
+** Input method
+#+BEGIN_SRC emacs-lisp
+  (loop
+   for from across "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖ\ЭЯЧСМИТЬБЮ№"
+   for to   across "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>#"
+   do
+   (eval `(define-key key-translation-map
+			(kbd ,(concat "C-" (string from))) (kbd ,(concat     "C-" (string to)))))
+   (eval `(define-key key-translation-map
+			(kbd ,(concat "M-" (string from))) (kbd ,(concat     "M-" (string to))))))
 #+END_SRC
