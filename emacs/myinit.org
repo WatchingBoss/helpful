@@ -1,53 +1,56 @@
-* Interface tweaks
+* Interface
 ** Theme
-   #+BEGIN_SRC emacs-lisp
-	 (load-theme 'monokai t)
-	 (set-face-foreground 'font-lock-comment-face "#b4b4b4")
-   #+END_SRC
-
-   #+RESULTS:
-   : t
-
+   #+begin_src emacs-lisp
+     (load-theme 'monokai t)
+     (set-face-foreground 'font-lock-comment-face "#969696")
+   #+end_src
 ** Window modes
-#+BEGIN_SRC emacs-lisp
-
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (setq-default column-number-mode t)
-
-#+END_SRC
-
+   #+begin_src emacs-lisp
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (scroll-bar-mode -1)
+     (setq-default column-number-mode t)
+   #+end_src
 ** Hide welcome screen
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
    #+END_SRC
-** Line wrapping
+** Line truncate
 #+BEGIN_SRC emacs-lisp
-  (setq-default word-wrap t)
+  (setq-default truncate-lines t)
 #+END_SRC
+** Line definition
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode 1)
+  (set-face-background 'hl-line "#333333")
+  (set-face-foreground 'highlight nil)
+  (set-face-attribute hl-line-face nil :underline nil)
+#+END_SRC
+** Font
+#+BEGIN_SRC emacs-lisp
+  ;; (cond ((eq system-type 'gnu/linux) (setq font-string "Liberation Mono 10"))
+  ;; 	  ((eq system-type 'windows-nt) (setq font-string "Liberation Mono 11"))
+  ;; 	  )
+
+  ;; (add-to-list 'default-frame-alist '(font . font-string))
+  ;; (set-face-attribute 'default t :font font-string)
+
+  (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
+  (set-face-attribute 'default t :font "Liberation Mono 11")
+#+END_SRC
+
+
 * Packages
-** Try
-   Provides use package without installing
-   #+BEGIN_SRC emacs-lisp
-
-	 (use-package try
-	   :ensure t)
-
-   #+END_SRC
 ** Which key
    Show help about keys
    #+BEGIN_SRC emacs-lisp
-
-	 (use-package which-key
-	   :ensure t
-	   :config (which-key-mode))
-
+     (use-package which-key
+       :ensure t
+       :config (which-key-mode))
    #+END_SRC
 
 ** Multiple cursors
    #+BEGIN_SRC emacs-lisp
-
 	 (use-package multiple-cursors
 	   :ensure t
 	   :init
@@ -58,179 +61,8 @@
 		 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 		 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)	
 		 ))
-
    #+END_SRC
 
-** Swiper and counsel
-   Change standard using console and search
-   #+BEGIN_SRC emacs-lisp
-
-	 (use-package counsel
-	   :ensure t
-	   )
-	 (use-package swiper
-	   :ensure t
-	   :bind (("C-s" . swiper)
-			  ("C-r" . swiper)
-			  ("C-c C-r" . ivy-resume)
-			  ("M-x" . counsel-M-x)
-			  ("C-x C-f" . counsel-find-file))
-	   :config
-	   (progn
-		 (ivy-mode 1)
-		 (setq ivy-use-virtual-buffers t)
-		 (setq enable-recursive-minibuffers t)
-		 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-		 ))
-
-   #+END_SRC
-
-** PHP-mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package php-mode
-       :ensure t
-       :config
-       (add-hook 'php-mode-hook
-                 '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
-       (add-hook 'php-mode-hook
-                 '(lambda ()
-                    (setq indent-tabs-mode t)
-                    (c-basic-offset 2)
-                    (setq tab-width 4))))
-   #+END_SRC
-
-** Web-mode
-   #+BEGIN_SRC emacs-lisp
-	 (use-package web-mode
-	   :ensure t
-	   :config
-	   (progn
-		 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-		 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-		 )
-	   (add-hook 'web-mode-hook '(lambda ()
-								   (setq web-mode-markup-indent-offset 2)))
-	   )
-   #+END_SRC
-
-** Emmet
-   #+BEGIN_SRC emacs-lisp
-
-	 (use-package emmet-mode
-	   :ensure t
-	   :init
-	   :config
-	   (add-hook 'sgml-mode-hook 'emmet-mode)
-	   (add-hook 'css-mode-hook ' emmet-mode)
-	   (add-hook 'web-mode-hook ' emmet-mode))
-
-   #+END_SRC
-
-** Flycheck
-   #+BEGIN_SRC emacs-lisp
-	 (use-package flycheck
-	   :ensure t
-	   :init (global-flycheck-mode t)
-	   :config
-	   (progn
-		 (setq flycheck-python-pylint-executable "pylint")
-		 (when (not (display-graphic-p))
-		   (setq flycheck-indication-mode nil))
-		 )
-	   )
-
-	 (dolist (my_hooks '(c-mode-hook c++-mode-hook))
-	   (add-hook my_hooks
-				 (lambda ()
-				   (setq flycheck-gcc-include-path
-						 (list
-						  ;; Different third party libs
-						  "/home/ubu/Documents/docs/libs/third_part_libs"
-						  ;; Boost
-						  "/usr/local/include"
-						  ;; GTK+3
-						  "/usr/include/gtk-3.0"
-						  "usr/include/at-spi2-atk/2.0"
-						  "/usr/include/at-spi-2.0"
-						  "/usr/include/dbus-1.0"
-						  "/usr/lib/x86_64-linux-gnu/dbus-1.0/include"
-						  "/usr/include/gtk-3.0"
-						  "/usr/include/gio-unix-2.0/"
-						  "/usr/include/cairo"
-						  "/usr/include/pango-1.0"
-						  "/usr/include/harfbuzz"
-						  "/usr/include/pango-1.0"
-						  "/usr/include/atk-1.0"
-						  "/usr/include/cairo"
-						  "/usr/include/pixman-1"
-						  "/usr/include/freetype2"
-						  "/usr/include/libpng16"
-						  "/usr/include/freetype2"
-						  "/usr/include/libpng16"
-						  "/usr/include/gdk-pixbuf-2.0"
-						  "/usr/include/libpng16"
-						  "/usr/include/glib-2.0"
-						  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
-						  ))) ))
-   #+END_SRC
-   
-   #+RESULTS:
-*** Rust
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck-rust
-	:ensure t
-	:init
-	(progn
-	  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-	  )
-	)
-#+END_SRC
-*** Golang
-	#+BEGIN_SRC emacs-lisp
-	  (use-package flycheck-gometalinter
-		:ensure t
-		:init
-		(progn
-		  (flycheck-gometalinter-setup)
-		  ;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
-		  (setq flycheck-gometalinter-vendor t)
-		  ;; only show errors
-		  (setq flycheck-gometalinter-errors-only t)
-		  ;; only run fast linters
-		  (setq flycheck-gometalinter-fast t)
-		  ;; use in tests files
-		  (setq flycheck-gometalinter-test t)
-		  ;; disable linters
-		  (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
-		  ;; Only enable selected linters
-		  (setq flycheck-gometalinter-disable-all t)
-		  (setq flycheck-gometalinter-enable-linters '("golint"))
-		  ;; Set different deadline (default: 5s)
-		  (setq flycheck-gometalinter-deadline "10s")
-		  )
-		)
-	#+END_SRC
-*** C/C++
-	#+BEGIN_SRC emacs-lisp
-	  ;; flycheck-pkg-config						
-	  (use-package flycheck-pkg-config
-		:ensure t
-		:init )
-	#+END_SRC
-
-*** Shell
-	#+BEGIN_SRC emacs-lisp
-     (use-package flycheck-checkbashisms
-       :ensure t
-       :config
-       (flycheck-checkbashisms-setup))
-	#+END_SRC
-	
 ** Hungry delete
    Delete all blank space before any symbol
    #+BEGIN_SRC emacs-lisp
@@ -254,179 +86,321 @@
    #+RESULTS:
    : t
 
-** C-Sharp mode
-#+BEGIN_SRC emacs-lisp
-  (use-package csharp-mode
-	:ensure t
-	:init
-	(defun my-csharp-mode-hook()
-	  (electric-pair-local-mode 1))
-	(progn
-	  (add-hook 'csharp-mode-hook 'my-csharp-mode-hook))
-	)
-#+END_SRC
-** Company mode
-   [[http://company-mode.github.io/][Site of package]]
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-	:ensure t
-	:init
-	(progn
-	  (add-hook 'after-init-hook 'global-company-mode)
-	  )
-	)
-#+END_SRC
-*** Golang
-#+BEGIN_SRC emacs-lisp
-  ;; Go-eldoc
-  (use-package go-eldoc
-	:ensure t
-	:config
-	(progn
-	  (add-hook 'go-mode-hook 'go-eldoc-setup)
-	  )
-	)
-#+END_SRC
-** GLSL mode
-#+BEGIN_SRC emacs-lisp
-  (use-package glsl-mode
-	:ensure t
-	:init
-	(progn
-	  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
-	  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-	  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-	  (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
-	  )
-	)
-#+END_SRC
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-	:ensure t
-	:init
-	(smartparens-global-mode t)
-	)
-#+END_SRC
-** Go-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package go-mode
-	:ensure t
-	:init
-	(progn
-	  (setq gofmt-command "goimports")
-	  (add-hook 'before-save-hook 'gofmt-before-save)
-	  )
-   )
-#+END_SRC
-** Markdown-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode
-	:ensure t
-	:commands (markdown-mode gfm-mode)
-	:mode (
-		   ("README\\.md\\'" . gfm-mode)
-		   ("\\.md\\'" . markdown-mode)
-		   ("\\.markdown\\'" . markdown-mode)
-		   )
-	:init
-	(progn
-	  (setq markdown-command "pandoc")
-	  )
-	)
-#+END_SRC
-** Emacs-ycmd
-#+BEGIN_SRC emacs-lisp
-  (use-package ycmd
-	:ensure t
-	:init
-	(progn
-	  (require 'ycmd-eldoc)
-	  (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
-	  )
-	(set-variable 'ycmd-server-command '("python3"
-										 "/media/ubu/data/Downloads/emacs/ycmd/ycmd/"))
-	(set-variable 'ycmd-global-config
-				  "/media/ubu/data/Downloads/emacs/ycmd/.global_config.py")
-	(set-variable 'ycmd-extra-conf-handler 'load)
-	(dolist (hooks '(c-mode-hook c++-mode-hook python-mode-hook go-mode-hook))
-	  (add-hook hooks 'ycmd-mode))
-	)
-
-  (use-package company-ycmd
-	:ensure t
-	:init (company-ycmd-setup)
-	)
-
-  (use-package flycheck-ycmd
-	:ensure t
-	:init
-	(progn
-	  (add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
-	  (add-to-list 'flycheck-checkers 'ycmd)
-	  )
-	)
-#+END_SRC
-** Rust-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package rust-mode
-	:ensure t
-	:init
-	(progn
-	  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-	  (setq rust-format-on-save t)
-	  )
-	)
-#+END_SRC
-** Rust: Emacs-racer
-#+BEGIN_SRC emacs-lisp
-  (use-package racer
-	:ensure t
-	:init
-	(progn
-	  (setq racer-rust-src-path "/home/ubu/.rustup/toolchains/stable-x86_64-unknown-linux-gnu\
-  /lib/rustlib/src/rust/src")
-	  )
-	:config
-	(add-hook 'rust-mode-hook #'racer-mode)
-	(add-hook 'racer-mode-hook #'company-mode)
-	)
-#+END_SRC
-** Eldoc
-#+BEGIN_SRC emacs-lisp
-  (use-package eldoc
-	:ensure t
-	:config
-	(add-hook 'ycmd-mode-hook #'eldoc-mode)
-	(add-hook 'racer-mode-hook #'eldoc-mode)
-	)
+    :ensure t
+    :init
+    (smartparens-global-mode t)
+    )
 #+END_SRC
 ** NeoTree
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
-	:ensure t
-	:init
-	(progn
-	  (global-set-key [f8] 'neotree-toggle))
-  )
+    :ensure t
+    :init
+    (progn
+      (global-set-key [f8] 'neotree-toggle))
+    )
 #+END_SRC
 ** Ox-pandoc
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-pandoc
-	:ensure t
-	:init
-	(progn
-	  (setq org-pandoc-options '((standalone . t)))
-	  )
-	)
+  ;; (use-package ox-pandoc
+  ;;   :ensure t
+  ;;   :init
+  ;;   (progn
+  ;;     (setq org-pandoc-options '((standalone . t)))
+  ;;     )
+  ;;   )
 #+END_SRC
 ** Ox-hugo
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-hugo
-	:ensure t
-	:after ox)
+  ;; (use-package ox-hugo
+  ;;   :ensure t
+  ;;   :after ox)
 #+END_SRC
-* Org mode
+** Helm
+   #+begin_src emacs-lisp
+	 (use-package helm
+	   :ensure t
+	   :bind(("M-x" . helm-M-x)
+			 ("C-x C-f" . 'helm-find-files)
+			 ("C-h a" . 'helm-apropos)
+			 ("C-x c" . 'helm-semantic-or-imenu)
+			 )
+	   :init
+	   (progn
+		 (setq helm-lisp-fuzzy-completion t)
+		 )
+	   )
+
+	 (use-package helm-swoop
+	   :ensure t
+	   :bind (("C-s" . 'helm-swoop)
+			  ("C-c M-i" . 'helm-multi-swoop)
+			  ("C-x M-i" . 'helm-multi-swoop-all)
+			  )
+	   :init
+	   (progn
+		 (setq helm-swoop-use-line-number-face t)
+		 (setq helm-swoop-move-line-cycle t)
+		 )
+	   )
+
+	 (use-package helm-ls-git
+	   :ensure t
+	   :bind (("C-<f6>" . 'helm-ls-git-ls)
+			  )
+	 )
+   #+end_src
+* File modes
+** C-Sharp mode
+#+BEGIN_SRC emacs-lisp
+  (use-package csharp-mode
+    :ensure t
+    :init
+    (defun my-csharp-mode-hook()
+      (electric-pair-local-mode 1))
+    (progn
+      (add-hook 'csharp-mode-hook 'my-csharp-mode-hook))
+    )
+#+END_SRC
+** Rust-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :ensure t
+    :init
+    (progn
+      (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+      (setq rust-format-on-save t)
+      )
+    )
+#+END_SRC
+** Go-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :init
+    (progn
+      (setq gofmt-command "goimports")
+      (add-hook 'before-save-hook 'gofmt-before-save)
+      )
+    )
+#+END_SRC
+** GLSL mode
+#+BEGIN_SRC emacs-lisp
+  (use-package glsl-mode
+    :ensure t
+    :init
+    (progn
+      (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
+      (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+      (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+      (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
+      )
+    )
+#+END_SRC
+** Markdown-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (
+	   ("README\\.md\\'" . gfm-mode)
+	   ("\\.md\\'" . markdown-mode)
+	   ("\\.markdown\\'" . markdown-mode)
+	   )
+    :init
+    (progn
+      (setq markdown-command "pandoc")
+      )
+    )
+#+END_SRC
+* Packages programming
+** Emmet
+   #+BEGIN_SRC emacs-lisp
+     (use-package emmet-mode
+       :ensure t
+       :init
+       :config
+       (add-hook 'sgml-mode-hook 'emmet-mode)
+       (add-hook 'css-mode-hook ' emmet-mode)
+       (add-hook 'web-mode-hook ' emmet-mode))
+   #+END_SRC
+** Flycheck
+   #+BEGIN_SRC emacs-lisp
+	 (use-package flycheck
+	   :ensure t
+	   :init (global-flycheck-mode t)
+	   :config
+	   (progn
+		 (setq flycheck-python-pylint-executable "pylint")
+		 (when (not (display-graphic-p))
+		   (setq flycheck-indication-mode nil))
+		 )
+	   )
+   #+END_SRC
+   
+   #+RESULTS:
+*** Rust
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package flycheck-rust
+  ;;   :ensure t
+  ;;   :init
+  ;;   (progn
+  ;;     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+  ;;     )
+  ;;   )
+#+END_SRC
+*** Golang
+	#+BEGIN_SRC emacs-lisp
+	  ;; (use-package flycheck-gometalinter
+	  ;;   :ensure t
+	  ;;   :init
+	  ;;   (progn
+	  ;; 	(flycheck-gometalinter-setup)
+	  ;; 	;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
+	  ;; 	(setq flycheck-gometalinter-vendor t)
+	  ;; 	;; only show errors
+	  ;; 	(setq flycheck-gometalinter-errors-only t)
+	  ;; 	;; only run fast linters
+	  ;; 	(setq flycheck-gometalinter-fast t)
+	  ;; 	;; use in tests files
+	  ;; 	(setq flycheck-gometalinter-test t)
+	  ;; 	;; disable linters
+	  ;; 	(setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
+	  ;; 	;; Only enable selected linters
+	  ;; 	(setq flycheck-gometalinter-disable-all t)
+	  ;; 	(setq flycheck-gometalinter-enable-linters '("golint"))
+	  ;; 	;; Set different deadline (default: 5s)
+	  ;; 	(setq flycheck-gometalinter-deadline "10s")
+	  ;; 	)
+	  ;;   )
+	#+END_SRC
+*** Shell
+    #+begin_src emacs-lisp
+	  ;; (use-package flycheck-checkbashisms
+	  ;;   :ensure t
+	  ;;   :config
+	  ;;   (flycheck-checkbashisms-setup))
+    #+end_src
+** Company mode
+   [[http://company-mode.github.io/][Site of package]]
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :init
+    (progn
+      (add-hook 'after-init-hook 'global-company-mode)
+      )
+    )
+#+END_SRC
+
+
+** Yasnipet
+   #+begin_src emacs-lisp
+	 (use-package yasnippet
+	   :ensure t
+	   :init
+	   (progn
+		 (setq yas-verbosity 1)
+		 (setq yas-wrap-around-region t)
+
+		 (with-eval-after-load 'yasnippet
+		   (setq yas-snippet-dirs '(yasnippet-snippets-dir)))
+
+		 (yas-global-mode t)
+		 )
+	   )
+
+	 (use-package yasnippet-snippets
+	   :ensure t
+	   )
+   #+end_src
+
+** LSP
+   #+begin_src emacs-lisp
+	 (use-package lsp-mode
+	   :ensure t
+	   :commands lsp
+	   :init
+	   (progn
+		 ;; Pyls for python
+		 (add-hook 'python-mode-hook 'lsp)
+		 )
+	   )
+
+	 (use-package lsp-ui
+	   :ensure t
+	   :commands lsp-ui-mode
+	   :init
+	   (progn
+		 (setq lsp-ui-sideline-ignore-duplicate t)
+		 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+		 )
+	   )
+
+	 (use-package company-lsp
+	   :ensure t
+	   :commands company-lsp
+	   :init
+	   (progn
+		 (push 'company-lsp company-backends)
+		 (setq company-transformers nil )
+		 (setq company-lsp-async t)
+		 (setq company-lsp-cache-candidates nil)
+		 )
+	   )
+
+	 (use-package ccls
+	   :ensure t
+	   :hook ((c-mode c++-mode) . (lambda () (require 'ccls) (lsp))
+			  )
+	   :init
+	   (progn
+		 (setq ccls-executable (file-truename "~/ccls/Release/ccls.exe"))
+		 (setq lsp-prefer-flymake nil)
+		 )
+	   )
+   #+end_src
+
+** DAP
+   Debugging packages
+
+
+** Eldoc
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package eldoc
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-hook 'ycmd-mode-hook #'eldoc-mode)
+  ;;   ;; (add-hook 'racer-mode-hook #'eldoc-mode) 
+  ;;   )
+
+  ;; (use-package go-eldoc
+  ;;   :ensure t
+  ;;   :config
+  ;;   (progn
+  ;; 	(add-hook 'go-mode-hook 'go-eldoc-setup)
+  ;; 	)
+  ;;   )
+#+END_SRC
+* Packages org-mode
+** Org-ac
+#+BEGIN_SRC emacs-lisp
+  (use-package org-ac
+	:ensure t)
+#+END_SRC
+** Org bullets
+   #+BEGIN_SRC emacs-lisp
+      ;; (use-package org-bullets
+      ;;  :ensure t
+      ;;  :config
+      ;;  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+   #+END_SRC
+
+
+* Org-mode
 ** Config org mode
   Activation org mode
   Definition global keys
@@ -444,78 +418,69 @@
      'org-babel-load-languages
      '((emacs-lisp . t)))
   #+END_SRC
-** Google calendar
+
+
+* Comfortability
+** ido
    #+BEGIN_SRC emacs-lisp
-	 (setq package-check-signarure nil)
-
-	 (use-package org-gcal
-	   :ensure t
-	   :config
-	   (setq org-gcal-client-id "3784406070-69cr5fjlnds9qnar0d7g3rbelrb8s9ql.apps.googleusercontent.com"
-			 org-gcal-client-secret "OWWg2jQrVjVJCx21wQqHKyJC"
-			 org-gcal-file-alist '(("opil9496@gmail.com" . "~/MEGAsync/orgfiles/gcal.org")) ))
-
-	 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-	 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+     (setq indo-enable-flex-matching t)
+     (setq ido-everywhere t)
+     (ido-mode 1)
+   #+END_SRC
+** Winner mode 
+   Use C-<left>, C-<right>
+   Use S-<up>, S-<right>, S-<down>, S-<left>
+   #+BEGIN_SRC emacs-lisp
+     (winner-mode 1)
+     (windmove-default-keybindings)
    #+END_SRC
 
-   #+RESULTS:
-   | lambda | nil | (org-gcal-sync) |
-
-** Org-agenda-files
-   #+BEGIN_SRC emacs-lisp
-     (setq org-agenda-files (list "~/MEGAsync/orgfiles/gcal.org"
-                                  "~/MEGAsync/orgfiles/i.org"))
-   #+END_SRC
-
-   #+RESULTS:
-   | ~/MEGAsync/orgfiles/gcal.org | ~/MEGAsync/orgfiles/i.org |
-
-** Org-capture-templates
-   #+BEGIN_SRC emacs-lisp
-     (setq org-capture-templates
-           '(("a" "Appointment" entry (file+headline "~/MEGAsync/orgfiles/gcal.org" "Appointments")
-              "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-             ("n" "Note" entry (file+headline "~/MEGAsync/orgfiles/notes.org" "Notes")
-              "* Note %?\n%T")
-             ("l" "Link" entry (file+headline "~/MEGAsync/orgfiles/links.org" "Links")
-              "* %? %^L %^g \n%T" :prepend t)
-             ("t" "To Do Item" entry (file+headline "~/MEGAsync/orgfiles/i.org" "To Do Items")
-              "* %?\n%T" :prepand t)))
-   #+END_SRC
-
-   #+RESULTS:
-   | a | Appointment | entry | (file+headline ~/MEGAsync/orgfiles/gcal.org Appointments) | * TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n |          |   |
-   | n | Note        | entry | (file+headline ~/MEGAsync/orgfiles/notes.org Notes)       | * Note %?\n%T                                           |          |   |
-   | l | Link        | entry | (file+headline ~/MEGAsync/orgfiles/links.org Links)       | * %? %^L %^g \n%T                                       | :prepend | t |
-   | t | To Do Item  | entry | (file+headline ~/MEGAsync/orgfiles/i.org To Do Items)     | * %?\n%T                                                | :prepand | t |
-
-** Org bullets
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets
-       :ensure t
-       :config
-       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-   #+END_SRC
-** Org-ac
+** Kill all buffers
 #+BEGIN_SRC emacs-lisp
-  (use-package org-ac
-	:ensure t)
+  (defun kill-other-buffers ()
+    "Kill all other buffers"
+    (interactive)
+    (mapc 'kill-buffer
+	  (delq (current-buffer)
+		(remove-if-not 'buffer-file-name (buffer-list))
+		)))
 #+END_SRC
-* Font
-#+BEGIN_SRC emacs-lisp
+** Russian layout keys
+   #+begin_src emacs-lisp
+     (loop
+      for from across "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖ\ЭЯЧСМИТЬБЮ№"
+      for to   across "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>#"
+      do
+      (eval `(define-key key-translation-map
+	       (kbd ,(concat "C-" (string from))) (kbd ,(concat     "C-" (string to)))))
+      (eval `(define-key key-translation-map
+	       (kbd ,(concat "M-" (string from))) (kbd ,(concat     "M-" (string to))))))
 
-  (add-to-list 'default-frame-alist '(font . "Liberation Mono 12"))
-  (set-face-attribute 'default t :font "Liberation Mono 12")
+   #+end_src
 
-#+END_SRC
-* Disable backup and autosave
+** Disable backup and autosave
   #+BEGIN_SRC emacs-lisp
-
     (setq backup-inhibited t)
     (setq auto-save-default nil)
-
   #+END_SRC
+
+
+* Colored TODO, NOTE
+  #+BEGIN_SRC emacs-lisp
+    ;; Bright-red TODOs
+    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+    (make-face 'font-lock-fixme-face)
+    (make-face 'font-lock-note-face)
+    (mapc (lambda (mode)
+            (font-lock-add-keywords
+             mode
+             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+          fixme-modes)
+    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+    (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
+  #+END_SRC
+
 
 * Controll in code
 ** Auto revert buffer
@@ -525,17 +490,16 @@
 #+END_SRC
 ** Add to auto mode alist .h of c-mode
    #+BEGIN_SRC emacs-lisp
-	 (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c++-mode))
-	 (add-to-list 'auto-mode-alist ' ("\\.hpp\\'" . c++-mode))
+     (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c++-mode))
    #+END_SRC
 
 ** Define my cc-mode style
    #+BEGIN_SRC emacs-lisp
 	 (setq-default c-default-style "k&r"
-		   c-basic-offset 4
-		   tab-width 4
-		   indent-tabs-mode t
-		   electric-pair-mode t)
+				   c-basic-offset 4
+				   tab-width 4
+				   indent-tabs-mode t
+				   electric-pair-mode t)
 
 	 (defun my-c-mode-hook ()
 	   (c-set-offset 'substatement-open '0)
@@ -557,47 +521,43 @@
 ** Move line
    Use M-<up> and M-<down> to move lines
    #+BEGIN_SRC emacs-lisp
+	 (defun move-line (n)
+	   "Move the current line up or down by N lines."
+	   (interactive "p")
+	   (setq col (current-column))
+	   (beginning-of-line) (setq start (point))
+	   (end-of-line) (forward-char) (setq end (point))
+	   (let ((line-text (delete-and-extract-region start end)))
+		 (forward-line n)
+		 (insert line-text)
+		 ;; restore point to original column in moved line
+		 (forward-line -1)
+		 (forward-char col)))
 
-(defun move-line (n)
-  "Move the current line up or down by N lines."
-  (interactive "p")
-  (setq col (current-column))
-  (beginning-of-line) (setq start (point))
-  (end-of-line) (forward-char) (setq end (point))
-  (let ((line-text (delete-and-extract-region start end)))
-    (forward-line n)
-    (insert line-text)
-    ;; restore point to original column in moved line
-    (forward-line -1)
-    (forward-char col)))
+	 (defun move-line-up (n)
+	   "Move the current line up by N lines."
+	   (interactive "p")
+	   (move-line (if (null n) -1 (- n))))
 
-(defun move-line-up (n)
-  "Move the current line up by N lines."
-  (interactive "p")
-  (move-line (if (null n) -1 (- n))))
+	 (defun move-line-down (n)
+	   "Move the current line down by N lines."
+	   (interactive "p")
+	   (move-line (if (null n) 1 n)))
 
-(defun move-line-down (n)
-  "Move the current line down by N lines."
-  (interactive "p")
-  (move-line (if (null n) 1 n)))
-
-(global-set-key (kbd "M-<up>") 'move-line-up)
-(global-set-key (kbd "M-<down>") 'move-line-down)
-
+	 (global-set-key (kbd "M-<up>") 'move-line-up)
+	 (global-set-key (kbd "M-<down>") 'move-line-down)
    #+END_SRC
 
 ** conf-mode-hook tabs
    #+BEGIN_SRC emacs-lisp
-	 (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
+     (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
    #+END_SRC
 ** comment
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'c++-mode-hook (lambda () (setq comment-start "/* "
-											comment-end   " */") ) )
-  (add-hook 'cc-mode-hook (lambda () (setq comment-start "/* "
-										   comment-end   " */") ) )
-  (add-hook 'csharp-mode-hook (lambda () (setq comment-start "/* "
-											   comment-end   " */") ) )
+  (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook csharp-mode-hok))
+	(add-hook hooks (lambda () (setq comment-start "// "
+									 comment-end "")))
+	)
 #+END_SRC
 ** Clang-format
 #+BEGIN_SRC emacs-lisp
@@ -612,65 +572,4 @@
 		)
 	  )
 	)
-#+END_SRC
-* Color for TODO, NOTE
-  #+BEGIN_SRC emacs-lisp
-    ;; Bright-red TODOs
-    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
-    (make-face 'font-lock-fixme-face)
-    (make-face 'font-lock-note-face)
-    (mapc (lambda (mode)
-            (font-lock-add-keywords
-             mode
-             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-          fixme-modes)
-    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
-    (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
-  #+END_SRC
-
-* Line definition
-#+BEGIN_SRC emacs-lisp
-  (global-hl-line-mode 1)
-  (set-face-background 'hl-line "#333333")
-  (set-face-foreground 'highlight nil)
-  (set-face-attribute hl-line-face nil :underline nil)
-#+END_SRC
-* Comfortable using
-** ido
-   #+BEGIN_SRC emacs-lisp
-
-     (setq indo-enable-flex-matching t)
-     (setq ido-everywhere t)
-     (ido-mode 1)
-
-   #+END_SRC
-** Winner mode 
-   Use C-<left>, C-<right>
-   Use S-<up>, S-<right>, S-<down>, S-<left>
-   #+BEGIN_SRC emacs-lisp
-	 (winner-mode 1)
-	 (windmove-default-keybindings)
-   #+END_SRC
-** Kill all buffers
-#+BEGIN_SRC emacs-lisp
-  (defun kill-other-buffers ()
-	"Kill all other buffers"
-	(interactive)
-	(mapc 'kill-buffer
-		  (delq (current-buffer)
-				(remove-if-not 'buffer-file-name (buffer-list))
-				))
-	)
-#+END_SRC
-** Input method
-#+BEGIN_SRC emacs-lisp
-  (loop
-   for from across "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖ\ЭЯЧСМИТЬБЮ№"
-   for to   across "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>#"
-   do
-   (eval `(define-key key-translation-map
-			(kbd ,(concat "C-" (string from))) (kbd ,(concat     "C-" (string to)))))
-   (eval `(define-key key-translation-map
-			(kbd ,(concat "M-" (string from))) (kbd ,(concat     "M-" (string to))))))
 #+END_SRC
