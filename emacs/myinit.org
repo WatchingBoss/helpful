@@ -1,8 +1,14 @@
 * Interface
 ** Theme
    #+begin_src emacs-lisp
-     (load-theme 'monokai t)
-     (set-face-foreground 'font-lock-comment-face "#969696")
+	 ;; (load-theme 'monokai t)
+
+	 (use-package monokai-theme
+	   :ensure t
+	   :config
+	   (load-theme 'monokai t))
+
+	 (set-face-foreground 'font-lock-comment-face "#969696")
    #+end_src
 ** Window modes
    #+begin_src emacs-lisp
@@ -16,18 +22,18 @@
      (setq inhibit-startup-screen t)
    #+END_SRC
 ** Line truncate
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (setq-default truncate-lines t)
-#+END_SRC
+   #+END_SRC
 ** Line definition
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode 1)
   (set-face-background 'hl-line "#333333")
   (set-face-foreground 'highlight nil)
   (set-face-attribute hl-line-face nil :underline nil)
-#+END_SRC
+   #+END_SRC
 ** Font
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; (cond ((eq system-type 'gnu/linux) (setq font-string "Liberation Mono 10"))
   ;; 	  ((eq system-type 'windows-nt) (setq font-string "Liberation Mono 11"))
   ;; 	  )
@@ -37,7 +43,7 @@
 
   (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
   (set-face-attribute 'default t :font "Liberation Mono 11")
-#+END_SRC
+   #+END_SRC
 
 
 * Packages
@@ -87,24 +93,24 @@
    : t
 
 ** Smartparens
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure t
     :init
     (smartparens-global-mode t)
     )
-#+END_SRC
+   #+END_SRC
 ** NeoTree
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package neotree
     :ensure t
     :init
     (progn
       (global-set-key [f8] 'neotree-toggle))
     )
-#+END_SRC
+   #+END_SRC
 ** Ox-pandoc
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; (use-package ox-pandoc
   ;;   :ensure t
   ;;   :init
@@ -112,13 +118,13 @@
   ;;     (setq org-pandoc-options '((standalone . t)))
   ;;     )
   ;;   )
-#+END_SRC
+   #+END_SRC
 ** Ox-hugo
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; (use-package ox-hugo
   ;;   :ensure t
   ;;   :after ox)
-#+END_SRC
+   #+END_SRC
 ** Helm
    #+begin_src emacs-lisp
 	 (use-package helm
@@ -155,7 +161,7 @@
    #+end_src
 * File modes
 ** C-Sharp mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode
     :ensure t
     :init
@@ -164,9 +170,9 @@
     (progn
       (add-hook 'csharp-mode-hook 'my-csharp-mode-hook))
     )
-#+END_SRC
+   #+END_SRC
 ** Rust-mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
     :ensure t
     :init
@@ -175,9 +181,9 @@
       (setq rust-format-on-save t)
       )
     )
-#+END_SRC
+   #+END_SRC
 ** Go-mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package go-mode
     :ensure t
     :init
@@ -186,9 +192,9 @@
       (add-hook 'before-save-hook 'gofmt-before-save)
       )
     )
-#+END_SRC
+   #+END_SRC
 ** GLSL mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package glsl-mode
     :ensure t
     :init
@@ -199,9 +205,9 @@
       (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
       )
     )
-#+END_SRC
+   #+END_SRC
 ** Markdown-mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :ensure t
     :commands (markdown-mode gfm-mode)
@@ -215,7 +221,7 @@
       (setq markdown-command "pandoc")
       )
     )
-#+END_SRC
+   #+END_SRC
 * Packages programming
 ** Emmet
    #+BEGIN_SRC emacs-lisp
@@ -243,7 +249,7 @@
    
    #+RESULTS:
 *** Rust
-#+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
   ;; (use-package flycheck-rust
   ;;   :ensure t
   ;;   :init
@@ -251,9 +257,9 @@
   ;;     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
   ;;     )
   ;;   )
-#+END_SRC
+    #+END_SRC
 *** Golang
-	#+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
 	  ;; (use-package flycheck-gometalinter
 	  ;;   :ensure t
 	  ;;   :init
@@ -276,7 +282,7 @@
 	  ;; 	(setq flycheck-gometalinter-deadline "10s")
 	  ;; 	)
 	  ;;   )
-	#+END_SRC
+    #+END_SRC
 *** Shell
     #+begin_src emacs-lisp
 	  ;; (use-package flycheck-checkbashisms
@@ -286,7 +292,7 @@
     #+end_src
 ** Company mode
    [[http://company-mode.github.io/][Site of package]]
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
     :init
@@ -294,7 +300,7 @@
       (add-hook 'after-init-hook 'global-company-mode)
       )
     )
-#+END_SRC
+   #+END_SRC
 
 
 ** Yasnipet
@@ -320,48 +326,49 @@
 
 ** LSP
    #+begin_src emacs-lisp
-	 (use-package lsp-mode
-	   :ensure t
-	   :commands lsp
-	   :init
-	   (progn
-		 ;; Pyls for python
-		 (add-hook 'python-mode-hook 'lsp)
-		 )
-	   )
+     (use-package lsp-mode
+       :ensure t
+       :commands lsp
+       :init
+       (progn
+	     ;; Pyls for python
+	     (add-hook 'python-mode-hook 'lsp)
+	     )
+       )
 
-	 (use-package lsp-ui
-	   :ensure t
-	   :commands lsp-ui-mode
-	   :init
-	   (progn
-		 (setq lsp-ui-sideline-ignore-duplicate t)
-		 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-		 )
-	   )
+     (use-package lsp-ui
+       :ensure t
+       :commands lsp-ui-mode
+       :init
+       (progn
+	     (setq lsp-ui-sideline-ignore-duplicate t)
+	     (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+	     )
+       )
 
-	 (use-package company-lsp
-	   :ensure t
-	   :commands company-lsp
-	   :init
-	   (progn
-		 (push 'company-lsp company-backends)
-		 (setq company-transformers nil )
-		 (setq company-lsp-async t)
-		 (setq company-lsp-cache-candidates nil)
-		 )
-	   )
+     (use-package company-lsp
+       :ensure t
+       :commands company-lsp
+       :init
+       (progn
+	     (push 'company-lsp company-backends)
+	     (setq company-transformers nil )
+	     (setq company-lsp-async t)
+	     (setq company-lsp-cache-candidates nil)
+	     )
+       )
 
-	 (use-package ccls
-	   :ensure t
-	   :hook ((c-mode c++-mode) . (lambda () (require 'ccls) (lsp))
-			  )
-	   :init
-	   (progn
-		 (setq ccls-executable (file-truename "~/ccls/Release/ccls.exe"))
-		 (setq lsp-prefer-flymake nil)
-		 )
-	   )
+     ;; (use-package ccls
+     ;;   :ensure t
+     ;;   :hook ((c-mode c++-mode) . (lambda () (require 'ccls) (lsp))
+     ;; 	 )
+     ;;   :init
+     ;;   (progn
+     ;;     ;;(setq ccls-executable (file-truename "~/ccls/Release/ccls.exe"))
+     ;;     (setq ccls-executable (file-truename "ccls"))
+     ;;     (setq lsp-prefer-flymake nil)
+     ;;     )
+     ;;   )
    #+end_src
 
 ** DAP
@@ -369,7 +376,7 @@
 
 
 ** Eldoc
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; (use-package eldoc
   ;;   :ensure t
   ;;   :config
@@ -384,13 +391,13 @@
   ;; 	(add-hook 'go-mode-hook 'go-eldoc-setup)
   ;; 	)
   ;;   )
-#+END_SRC
+   #+END_SRC
 * Packages org-mode
 ** Org-ac
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package org-ac
 	:ensure t)
-#+END_SRC
+   #+END_SRC
 ** Org bullets
    #+BEGIN_SRC emacs-lisp
       ;; (use-package org-bullets
@@ -402,9 +409,9 @@
 
 * Org-mode
 ** Config org mode
-  Activation org mode
-  Definition global keys
-  #+BEGIN_SRC emacs-lisp
+   Activation org mode
+   Definition global keys
+   #+BEGIN_SRC emacs-lisp
     (require 'org)
 
     (global-set-key "\C-cl" 'org-store-link)
@@ -417,7 +424,7 @@
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)))
-  #+END_SRC
+   #+END_SRC
 
 
 * Comfortability
@@ -436,7 +443,7 @@
    #+END_SRC
 
 ** Kill all buffers
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (defun kill-other-buffers ()
     "Kill all other buffers"
     (interactive)
@@ -444,7 +451,7 @@
 	  (delq (current-buffer)
 		(remove-if-not 'buffer-file-name (buffer-list))
 		)))
-#+END_SRC
+   #+END_SRC
 ** Russian layout keys
    #+begin_src emacs-lisp
      (loop
@@ -459,11 +466,15 @@
    #+end_src
 
 ** Disable backup and autosave
-  #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
     (setq backup-inhibited t)
     (setq auto-save-default nil)
-  #+END_SRC
+   #+END_SRC
 
+** Turn off save to clibboard
+#+BEGIN_SRC emacs-lisp
+  (setq x-select-enable-clipboard-manager nil)
+#+END_SRC
 
 * Colored TODO, NOTE
   #+BEGIN_SRC emacs-lisp
@@ -484,10 +495,10 @@
 
 * Controll in code
 ** Auto revert buffer
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (global-auto-revert-mode t)
   (add-hook 'dired-mode-hook 'auto-revert-mode)
-#+END_SRC
+   #+END_SRC
 ** Add to auto mode alist .h of c-mode
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c++-mode))
@@ -553,14 +564,14 @@
      (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
    #+END_SRC
 ** comment
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (dolist (hooks '(c-mode-hook c++-mode-hook java-mode-hook csharp-mode-hok))
 	(add-hook hooks (lambda () (setq comment-start "// "
 									 comment-end "")))
 	)
-#+END_SRC
+   #+END_SRC
 ** Clang-format
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (use-package clang-format
 	:ensure t
 	:config
@@ -572,4 +583,4 @@
 		)
 	  )
 	)
-#+END_SRC
+   #+END_SRC
