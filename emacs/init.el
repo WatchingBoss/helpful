@@ -2,9 +2,8 @@
 (require 'package)
 
 ;; add repository list
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/" ) t)
-
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
 ;; initialize package.el
 (package-initialize)
 
@@ -13,7 +12,10 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; Need it?
 ;;(use-package org-tempo)
+
+;; Org-mode
 (use-package org :ensure t)
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
@@ -28,7 +30,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(spinner lsp-mode clang-format org-ac yasnippet-snippets which-key use-package smartparens rust-mode neotree multiple-cursors monokai-theme monokai-pro-theme markdown-mode hungry-delete helm-swoop helm-ls-git go-mode glsl-mode flycheck expand-region emmet-mode csharp-mode company))))
+	(htmlize jsonrpc eglot company-quickhelp helm-flx company-statistics helm-system-packages helm-descbinds flx helm-swoop org-bullets flycheck emmet-mode yasnippet-snippets yasnippet company rg ox-hugo ox-pandoc markdown-mode glsl-mode go-mode rust-mode csharp-mode clang-format smartparens expand-region hungry-delete multiple-cursors reverse-im treemacs-magit treemacs-icons-dired treemacs-projectile treemacs helm-ls-git which-key monokai-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
