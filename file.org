@@ -1,7 +1,0 @@
-#+title: Just testing latex in GitHub
-
-* This is any latex
-
-\begin{equation}
-  \color{#006600}{(a+b)^2} = \color{#000077}{a^2 + 2ab + b^2}
-\end{equation}
