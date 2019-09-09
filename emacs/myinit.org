@@ -1,15 +1,5 @@
-git (CLI), gitk, tig, etc. -> magit
-htop -> symon, proced, helm-top
-abook -> org-contacts
-mutt -> mu4e, gnus
-ncdu -> dired-du
-cmus/moc -> EMMS
-newsbeuter -> Elfeed, gnus
-weechat, irssi -> ERC, etc.
-
 * Interface
 ** Theme
-
 #+BEGIN_SRC emacs-lisp
   (use-package monokai-theme
     :ensure t
@@ -19,14 +9,12 @@ weechat, irssi -> ERC, etc.
   (set-face-foreground 'font-lock-comment-face "#969696")
 #+END_SRC
 ** Window modes
-
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 #+END_SRC
 ** Mode line
-
 #+BEGIN_SRC emacs-lisp
   (setq column-number-mode t
 		size-indication-mode t
@@ -34,12 +22,10 @@ weechat, irssi -> ERC, etc.
 		display-time-default-load-average nil)
 #+END_SRC
 ** Welcome screen
-
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen t)
 #+END_SRC
 ** Line definition
-
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode t)
   (set-face-background 'hl-line "#333333")
@@ -47,7 +33,6 @@ weechat, irssi -> ERC, etc.
   (set-face-attribute hl-line-face nil :underline nil)
 #+END_SRC
 ** Font
-
 #+BEGIN_SRC emacs-lisp
   ;; (cond ((eq system-type 'gnu/linux) (setq font-string "Liberation Mono 10"))
   ;; 	  ((eq system-type 'windows-nt) (setq font-string "Liberation Mono 11"))
@@ -61,31 +46,26 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 * Emacs behavior
 ** Backup and autosave
-
 #+BEGIN_SRC emacs-lisp
   (setq backup-inhibited t)
   (setq auto-save-default nil)
 #+END_SRC
 ** Auto revert buffer
-
 #+BEGIN_SRC emacs-lisp
   (global-auto-revert-mode t)
   (add-hook 'dired-mode-hook 'auto-revert-mode)
 #+END_SRC
 ** Save to clibboard
-
 #+BEGIN_SRC emacs-lisp
   (setq x-select-enable-clipboard-manager nil)
 #+END_SRC
 * Environment
 ** Winner mode
-
 #+BEGIN_SRC emacs-lisp
   (winner-mode 1)
   (windmove-default-keybindings)
 #+END_SRC
 ** Which key
-
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
 	:ensure t
@@ -94,8 +74,7 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** Helm
-*** Helm itself
-
+*** Helm
 #+BEGIN_SRC emacs-lisp
   (use-package helm
 	:demand
@@ -140,7 +119,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 *** Helm-swoop
-
 #+BEGIN_SRC emacs-lisp
   (use-package helm-swoop
 	:requires helm
@@ -155,7 +133,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 *** Helm-ls-git
-
 #+BEGIN_SRC emacs-lisp
   (use-package helm-ls-git
 	:ensure t
@@ -163,7 +140,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 *** Imenu-anywhere + helm
-
 #+BEGIN_SRC emacs-lisp
   (defun imenu-anywhere-same-buffer-p (current other) (eq current other))
 
@@ -174,7 +150,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 *** Helm-flx
-
 #+BEGIN_SRC emacs-lisp
   (use-package flx)
   (use-package helm-flx
@@ -185,81 +160,28 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 *** Helm-descbinds
 	"C-z" gives persistent description of the current command
-
 #+BEGIN_SRC emacs-lisp
   (use-package helm-descbinds
 	:init
 	(helm-descbinds-mode)
 	)
 #+END_SRC
-*** Helm-c-yasnipper
-
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-c-yasnipper
-	:requires yasnippet
-	:bind (("C-c y" . helm-yas-complete))
-	:custom
-	(helm-yas-space-mathc-any-greedy t)
-	)
-#+END_SRC
 *** Helm-system-packages
 	Interface to the package manager of operating system
-
 #+BEGIN_SRC emacs-lisp
   (use-package helm-system-packages)
 #+END_SRC
-** Projectle
-
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-	:diminish
-	:bind ("M-o p" . counsel-projectile-switch-project)
-	:config
-	(projectile-mode +1)
-	(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-	)
-
-  (use-package helm-projectile
-	:requires projectile helm
+** Neotree
+#+BEGIN_SRC elisp
+  (use-package neotree
+	:ensure t
+	:bind ("<f8>" . 'neotree-toggle)
 	:custom
-	(helm-projectile-fuzzy-mathc t)
-	(projectile-switch-project-action 'helm-projectile-find-file)
+	(inhibit-compacting-font-caches t)
+	(neo-theme (if (display-graphic-p) 'icons 'arrow))
+	(neo-smart-open t)
+	(neo-show-hidden-files t)
 	)
-#+END_SRC
-** Treemacs
-*** Treemancs itself
-
-#+BEGIN_SRC emacs-lisp
-  (use-package treemacs
-	:ensure t
-	:defer t
-	:init
-	(with-eval-after-load 'winum
-	  (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-	:bind (:map global-map
-				("M-0"       . treemacs-select-window)
-				("<f8>"      . treemacs)
-				("C-x M-t"   . treemacs-find-tag)
-				("C-x C-t"   . treemacs-find-file)
-				)
-	)
-#+END_SRC
-*** Treemacs {
-	projectile, icons - dired, magit}
-
-#+BEGIN_SRC emacs-lisp
-  (use-package treemacs-projectile
-	:after treemacs projectile
-	:ensure t)
-
-  (use-package treemacs-icons-dired
-	:after treemacs dired
-	:ensure t
-	:config (treemacs-icons-dired-mode))
-
-  (use-package treemacs-magit
-	:after treemacs magit
-	:ensure t)
 #+END_SRC
 * Typing text
 ** Flyspell
@@ -385,7 +307,6 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 * Code
 ** Comments
-
 #+BEGIN_SRC emacs-lisp
   (dolist (hooks '(c-mode-hook
 		   c++-mode-hook
@@ -396,32 +317,30 @@ weechat, irssi -> ERC, etc.
     )
 #+END_SRC
 ** Configs
-
 #+BEGIN_SRC emacs-lisp
   (add-hook 'conf-mode-hook (lambda () (setq indent-tabs-mode t)))
 #+END_SRC
 ** Clang-format
-
 #+BEGIN_SRC emacs-lisp
   (use-package clang-format
-    :ensure t
-    :config
-    (progn
+	:ensure t
+	:config
+	(progn
 	  (dolist (hooks '(c-mode-hook
+					   cc-mode-hook
 					   c++-mode-hook
 					   csharp-mode-hook
 					   java-mode-hook
 					   javascript-mode-hook))
-	    (add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
-	    (add-hook hooks (lambda () (local-set-key (kbd "C-M-|") #'clang-format-buffer)))
-	    ;; (add-hook hooks (lambda () (add-hook 'before-save-hook #'clang-format-buffer)))
-	    )
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-\\") #'clang-format-region)))
+		(add-hook hooks (lambda () (local-set-key (kbd "C-M-|") #'clang-format-buffer)))
+		;; (add-hook hooks (lambda () (add-hook 'before-save-hook #'clang-format-buffer)))
+		)
 	  )
-    )
+	)
 #+END_SRC
 * Languages
 ** Common
-
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4
 				indent-tabs-mode t
@@ -429,12 +348,10 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 ** C/C++
 *** .h is c++-mode
-
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist ' ("\\.h\\'" . c++-mode))
 #+END_SRC
 *** cc-mode style
-
 #+BEGIN_SRC emacs-lisp
   (use-package cc-mode
     :bind (:map c-mode-base-map ("C-c c" . compile))
@@ -444,7 +361,6 @@ weechat, irssi -> ERC, etc.
     )
 #+END_SRC
 ** C#
-
 #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode
     :ensure t
@@ -452,7 +368,6 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 
 ** Rust-mode
-
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
 	:ensure t
@@ -463,7 +378,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** Go-mode
-
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
 	:ensure t
@@ -474,7 +388,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** GLSL mode
-
 #+BEGIN_SRC emacs-lisp
   (use-package glsl-mode
 	:ensure t
@@ -487,7 +400,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** Markdown-mode
-
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
 	:ensure t
@@ -499,6 +411,16 @@ weechat, irssi -> ERC, etc.
 	:custom
 	(markdown-command "pandoc")
 	)
+#+END_SRC
+** CMake
+#+BEGIN_SRC elisp
+  (autoload 'cmake-mode "/usr/share/cmake-3.15/editors/emacs/cmake-mode.el" t)
+
+  (setq auto-mode-alist
+		(append
+		 '(("CMakeLists\\.txt\\'" . cmake-mode))
+		 '(("\\.cmake\\'" . cmake-mode))
+		 auto-mode-alist))
 #+END_SRC
 * Utility
 ** Ox-pandoc
@@ -513,7 +435,6 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 ** Ox-hugo
    Org exporter back-end for Hugo
-
 #+BEGIN_SRC emacs-lisp
   (use-package ox-hugo
 	:ensure t
@@ -617,7 +538,6 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 * Programming
 ** Company
-
 #+BEGIN_SRC emacs-lisp
   (use-package company-statistics
 	:config
@@ -642,52 +562,7 @@ weechat, irssi -> ERC, etc.
 		   )
 	)
 #+END_SRC
-*** Company-box
-
-#+BEGIN_SRC emacs-lisp
-    ;; (use-package company-box
-    ;; 	:hook company-mode
-    ;; 	:custom
-    ;; 	(company-box-icons-alist 'company-box-icons-all-the-icons)
-    ;; 	(company-box-backends-colors nil)
-    ;; 	(company-box-show-single-candidate t)
-    ;; 	(company-box-max-candidates 15)
-    ;; 	)
-#+END_SRC
-*** Company-quickhelp
-
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package company-quickhelp
-  ;;   ;;  :defines company-quickhelp-delay
-  ;;   :ensure t
-  ;;   :bind (:map company-active-map
-  ;; 			  ("M-h" . company-quickhelp-manual-begin)
-  ;; 			  )
-  ;;   :hook global-company-mode
-  ;;   :custom
-  ;;   (company-quickhelp-delay 1.0)
-  ;;   )
-#+END_SRC
-** Yasnipet
-
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-	:ensure t
-	:config
-	(with-eval-after-load 'yasnippet
-	  (setq yas-snippet-dirs '(yasnippet-snippets-dir)))
-	:custom
-	(yas-verbosity 1)
-	(yas-wrap-around-region t)
-	(yas-global-mode t)
-	)
-
-  (use-package yasnippet-snippets
-	:ensure t
-	)
-#+END_SRC
 ** Emmet
-
 #+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
 	:ensure t
@@ -697,7 +572,6 @@ weechat, irssi -> ERC, etc.
 	(add-hook 'web-mode-hook ' emmet-mode))
 #+END_SRC
 ** Flycheck
-
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
 	:ensure t
@@ -707,16 +581,10 @@ weechat, irssi -> ERC, etc.
 	(flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 	)
 #+END_SRC
-** LSP
-
-#+BEGIN_SRC emacs-lisp
-
-#+END_SRC
 * Org-mode
 ** Config org mode
    Activation org mode
    Definition global keys
-
 #+BEGIN_SRC emacs-lisp
   (use-package org
 	:bind (("C-c a" . org-agenda)
@@ -736,7 +604,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** Org-babel
-
 #+BEGIN_SRC emacs-lisp
   (require 'ob-emacs-lisp)
   (org-babel-do-load-languages
@@ -747,7 +614,6 @@ weechat, irssi -> ERC, etc.
 		   )))
 #+END_SRC
 ** Org bullets
-
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
 	:ensure t
@@ -756,7 +622,6 @@ weechat, irssi -> ERC, etc.
 	)
 #+END_SRC
 ** htmlize
-
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize
 	:commands (htmlize-buffer
@@ -769,7 +634,6 @@ weechat, irssi -> ERC, etc.
 #+END_SRC
 * My functions
 ** Org to html
-
 #+BEGIN_SRC emacs-lisp
   (defun current-org-to-html (file)
 	"Convert org file to html"
