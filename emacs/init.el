@@ -1,8 +1,9 @@
 ;; start package.el
 (require 'package)
-;; add MELPA to repository list
-(add-to-list 'package-archives
-			 '("melpa" . "https://melpa.org/packages/") t)
+
+;; add repository list
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
 ;; initialize package.el
 (package-initialize)
 
@@ -11,14 +12,17 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package org-tempo)
+;; Need it?
+;;(use-package org-tempo)
+
+;; Org-mode
+(use-package org :ensure t)
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
 (server-start)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -26,7 +30,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(yasnippet-snippets yasnippet ccls helm-ls-git helm-swoop helm company-lsp lsp-ui lsp-mode use-package org))))
+	(neotree ccls lsp-mode helm-lsp htmlize jsonrpc eglot company-quickhelp helm-flx company-statistics helm-system-packages helm-descbinds flx helm-swoop org-bullets flycheck emmet-mode yasnippet-snippets yasnippet company rg ox-hugo ox-pandoc markdown-mode glsl-mode go-mode rust-mode csharp-mode clang-format smartparens expand-region hungry-delete multiple-cursors reverse-im treemacs-magit treemacs-icons-dired treemacs-projectile treemacs helm-ls-git which-key monokai-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
