@@ -10,16 +10,16 @@
 #+END_SRC
 ** Window modes
 #+BEGIN_SRC emacs-lisp
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  (setq-default menu-bar-mode nil
+				tool-bar-mode nil
+				scroll-bar-mode nil)
 #+END_SRC
 ** Mode line
 #+BEGIN_SRC emacs-lisp
-  (setq column-number-mode t
-		size-indication-mode t
-		display-time-mode t
-		display-time-default-load-average nil)
+  (setq-default column-number-mode t
+				size-indication-mode t
+				display-time-mode t
+				display-time-default-load-average t)
 #+END_SRC
 ** Welcome screen
 #+BEGIN_SRC emacs-lisp
@@ -34,21 +34,14 @@
 #+END_SRC
 ** Font
 #+BEGIN_SRC emacs-lisp
-  ;; (cond ((eq system-type 'gnu/linux) (setq font-string "Liberation Mono 10"))
-  ;; 	  ((eq system-type 'windows-nt) (setq font-string "Liberation Mono 11"))
-  ;; 	  )
-
-  ;; (add-to-list 'default-frame-alist '(font . font-string))
-  ;; (set-face-attribute 'default t :font font-string)
-
   (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
   (set-face-attribute 'default t :font "Liberation Mono 11")
 #+END_SRC
 * Emacs behavior
 ** Backup and autosave
 #+BEGIN_SRC emacs-lisp
-  (setq backup-inhibited t)
-  (setq auto-save-default nil)
+  (setq-default backup-inhibited t
+				auto-save-default nil)
 #+END_SRC
 ** Auto revert buffer
 #+BEGIN_SRC emacs-lisp
@@ -57,7 +50,7 @@
 #+END_SRC
 ** Save to clibboard
 #+BEGIN_SRC emacs-lisp
-  (setq x-select-enable-clipboard-manager nil)
+  (setq-default x-select-enable-clipboard-manager nil)
 #+END_SRC
 * Environment
 ** Winner mode
@@ -139,16 +132,6 @@
 	:bind (("C-<f6>" . 'helm-ls-git-ls))
 	)
 #+END_SRC
-*** Imenu-anywhere + helm
-#+BEGIN_SRC emacs-lisp
-  (defun imenu-anywhere-same-buffer-p (current other) (eq current other))
-
-  (use-package imenu-anywhere
-	:bind (("C-c C-i" . helm-imenu-anywhere))
-	:config
-	(setq imenu-anywhere-buffer-filter-function '(imenu-anywhere-same-buffer-p))
-	)
-#+END_SRC
 *** Helm-flx
 #+BEGIN_SRC emacs-lisp
   (use-package flx)
@@ -156,14 +139,6 @@
 	:requires flx
 	:config
 	(helm-flx-mode +1)
-	)
-#+END_SRC
-*** Helm-descbinds
-	"C-z" gives persistent description of the current command
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-descbinds
-	:init
-	(helm-descbinds-mode)
 	)
 #+END_SRC
 *** Helm-system-packages
@@ -185,15 +160,17 @@
 #+END_SRC
 * Typing text
 ** Flyspell
-
+   Spelling for windows:
+   https://lists.gnu.org/archive/html/help-gnu-emacs/2014-04/msg00030.html
 #+BEGIN_SRC emacs-lisp
-  (setq-default flyspell-issue-message-flag nil)
-  (dolist (hooks '(text-mode-hook org-mode-hook))
-	(add-hook hooks (lambda () (flyspell-mode t)))
+  (if (eq system-type "gnu/linux")
+	  (setq-default flyspell-issue-message-flag nil)
+	(dolist (hooks '(text-mode-hook org-mode-hook))
+	  (add-hook hooks (lambda () (flyspell-mode t)))
+	  )
 	)
 #+END_SRC
 ** Russian layout keys
-
 #+BEGIN_SRC emacs-lisp
   (use-package reverse-im
 	:ensure t
@@ -206,7 +183,6 @@
 ** Move line
    Move line
    M-<up> and M-<down>
-
 #+BEGIN_SRC emacs-lisp
   (defun move-line (n)
     "Move the current line up or down by N lines."
@@ -233,10 +209,8 @@
 
   (global-set-key (kbd "M-<up>") 'move-line-up)
   (global-set-key (kbd "M-<down>") 'move-line-down)
-
 #+END_SRC
 ** Multiple cursors
-
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
 	:ensure t
@@ -252,13 +226,11 @@
 #+END_SRC
 
 ** Line truncate
-
 #+BEGIN_SRC emacs-lisp
   (setq-default truncate-lines t)
 #+END_SRC
 ** Hungry delte
    Delete all blank space before any symbol
-
 #+BEGIN_SRC emacs-lisp
   (use-package hungry-delete
 	:ensure t
@@ -267,24 +239,20 @@
 	)
 #+END_SRC
 ** Expand region
-
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
 	:ensure t
 	:config
 	(global-set-key (kbd "C-=") 'er/expand-region)
 	)
-
 #+END_SRC
 ** Smartparens
-
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
 	:ensure t
 	:custom
 	(smartparens-global-mode t)
 	)
-
 #+END_SRC
 * Colored TODO, NOTE
   | Red        | TODO |
@@ -303,7 +271,6 @@
 	fixme-modes)
   (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
   (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
-
 #+END_SRC
 * Code
 ** Comments
@@ -414,7 +381,9 @@
 #+END_SRC
 ** CMake
 #+BEGIN_SRC elisp
-  (autoload 'cmake-mode "/usr/share/cmake-3.15/editors/emacs/cmake-mode.el" t)
+  (if (eq system-type "gnu/linux")
+	  (autoload 'cmake-mode "/usr/share/cmake-3.15/editors/emacs/cmake-mode.el" t)
+	)
 
   (setq auto-mode-alist
 		(append
@@ -425,7 +394,6 @@
 * Utility
 ** Ox-pandoc
    Exporter that translates Org-mode file to various other formats via Pandoc
-
 #+BEGIN_SRC emacs-lisp
   (use-package ox-pandoc
 	:ensure t
@@ -443,7 +411,6 @@
 #+END_SRC
 ** Rg
 	Ripgrep
-
 #+BEGIN_SRC emacs-lisp
   (use-package rg
 	:ensure t
@@ -451,7 +418,6 @@
 	)
 #+END_SRC
 ** Magit
-
 #+BEGIN_SRC emacs-lisp
   (use-package magit
 	:commands magit-get-top-dir
