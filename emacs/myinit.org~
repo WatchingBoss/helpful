@@ -159,6 +159,17 @@
 	)
 #+END_SRC
 * Typing text
+** Flyspell
+   Spelling for windows:
+   https://lists.gnu.org/archive/html/help-gnu-emacs/2014-04/msg00030.html
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type "gnu/linux")
+	  (setq-default flyspell-issue-message-flag nil)
+	(dolist (hooks '(text-mode-hook org-mode-hook))
+	  (add-hook hooks (lambda () (flyspell-mode t)))
+	  )
+	)
+#+END_SRC
 ** Russian layout keys
 #+BEGIN_SRC emacs-lisp
   (use-package reverse-im
