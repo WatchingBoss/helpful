@@ -37,6 +37,7 @@
   (add-to-list 'default-frame-alist '(font . "Liberation Mono 11"))
   (set-face-attribute 'default t :font "Liberation Mono 11")
 #+END_SRC
+
 * Emacs behavior
 ** Backup and autosave
 #+BEGIN_SRC emacs-lisp
@@ -52,6 +53,7 @@
 #+BEGIN_SRC emacs-lisp
   (setq-default x-select-enable-clipboard-manager nil)
 #+END_SRC
+
 * Environment
 ** Winner mode
 #+BEGIN_SRC emacs-lisp
@@ -387,7 +389,15 @@
   (use-package ox-pandoc
 	:ensure t
 	:config
+	;; default options for all output formats
 	(setq org-pandoc-options '((standalone . t)))
+	;; cancel above settings only for 'docx' format
+	(setq org-pandoc-options-for-docx '((standalone . nil)))
+	;; special settings for beamer-pdf and latex-pdf exporters
+	(setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
+	(setq org-pandoc-options-for-latex-pdf '((pdf-engine . "xelatex")))
+	;; special extensions for markdown_github output
+	(setq org-pandoc-format-extensions '(markdown_github+pipe_tables+raw_html))
 	)
 #+END_SRC
 ** Ox-hugo
@@ -570,11 +580,12 @@
 #+END_SRC
 ** Org bullets
 #+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-	:ensure t
-	:config
-	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-	)
+  ;; (use-package org-bullets
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  ;;   )
+  ;; (set-default org-bullets-mode nil)
 #+END_SRC
 ** htmlize
 #+BEGIN_SRC emacs-lisp
